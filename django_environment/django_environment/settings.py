@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-1q0$#d$hz4hwq_z(dk&fgy#v-zo(_*j1kn^fg(s^u4ax!d2our
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'feedcreator.paul-kluge.de', 'feedfusion.nl', 'www.feedfusion.nl']
 
 
 # Application definition
@@ -121,8 +121,12 @@ STATIC_URL = "static/"
 
 # DEVELOPMENT
 STATIC_ROOT = '/Users/paulkluge/Documents/Work/Codebase/Offgridcentrum/product_feed_creator/django_environment/static'
+# PRODUCTION
+# STATIC_ROOT = '/home/datafeeds/django_environment/static'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240

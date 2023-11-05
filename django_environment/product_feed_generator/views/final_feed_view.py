@@ -4,26 +4,19 @@ import xmltodict
 import urllib.request
 from urllib.request import Request
 import json
-from product_feed_generator.models import Serverkast_Product
 from dicttoxml import dicttoxml
+from product_feed_generator.models import Serverkast_Product
 
 def final_feed_view(request):
-    if "generate_final_feed_submit" in request.POST:
-        """
-            TODO-FFC
-            GET SELECTED PRODUCTS
-            FROM ALL FEEDS
-            NOT JUST Serverkast_Product
-        """
-        products = Serverkast_Product.objects.filter(is_selected=True).values()
-        xml = dicttoxml(products, custom_root='test', attr_type=False)
+    if "clear_final_feed_submit" in request.POST:
+        xml = dicttoxml({}, custom_root='product_final_feed', attr_type=False)
         f =  open("product_feed_generator/templates/final-feed-file.xml", "wb")
         f.write(xml)
         f.close()
-        context = {"message": 'File is generated.'}
+        context = {"message": 'File is cleared'}
         template = get_template("final_feed_page.html")
         return HttpResponse(template.render(context, request))
-    elif request.method == "GET":
+    if request.method == "GET":
         context = {}
         template = get_template("final_feed_page.html")
         return HttpResponse(template.render(context, request))

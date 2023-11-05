@@ -24,18 +24,19 @@
 {% block content %}
 <div class="container mt-5">
       <h1 class="card-title"
-          style="margin-top: 100px !important; text-align: center;">Generate Final Feed File</h1>
+          style="margin-top: 100px !important; text-align: center;">Your Final Feed File</h1>
       <div class="card text-center mt-5">
             <div class="card-body">
-                  <h4 class="card-title">– Out of all selected Products from the Feeds –</h4>
+                  <!-- <h4 class="card-title">– Out of all selected Products from the Feeds –</h4> -->
+                  <a href="{% static 'final-feed-file.xml' %}"
+                     class="btn btn-primary my-2">Open XML File</a>
+
                   <form class=""
                         method="POST">
                         <button type="submit"
-                                name="generate_final_feed_submit"
-                                class="btn btn-primary my-2">Click here to generate</button>
+                                name="clear_final_feed_submit"
+                                class="btn btn-primary my-2">Clear the File</button>
                   </form>
-                  <a href="{% url 'final_feed_xml_page' %}"
-                     class="btn btn-primary my-2">Open XML File</a>
             </div>
       </div>
 </div>

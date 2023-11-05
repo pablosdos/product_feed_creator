@@ -5,5 +5,5 @@ urlpatterns = [
     path('', feed_selection_view, name='feed_selection_page'),
     path('feeds/<str:shop_name>', product_selection_view, name='product_selection_page'),
     path('final-feed', final_feed_view, name='final_feed_page'),
-    path('final-feed-xml', final_feed_xml_view, name='final_feed_xml_page'),
+    # path('final-feed-xml', final_feed_xml_view, name='final_feed_xml_page'),
 ]

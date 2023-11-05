@@ -14,49 +14,81 @@
           href="{% static 'custom-bootstrap/custom.css' %}">
     <script src="{% static 'bootstrap-5.3.2/dist/js/bootstrap.js' %}"></script>
 </head>
-
+{% if message %}
+<script>
+    alert('{{ message }}');
+</script>
+{% endif %}
+<script>
+    function toggle(source) {
+        var toggler;
+        var allInputs = document.getElementsByTagName("input");
+        if (source.checked == true) {
+            toggler = true;
+        }
+        else if (source.checked == true) {
+            toggler = false;
+        }
+        for (var i = 0, max = allInputs.length; i < max; i++) {
+            if (allInputs[i].type === 'checkbox')
+                allInputs[i].checked = toggler;
+        }
+    }
+</script>
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <h1 class="card-title"
-        style="margin-top: 100px !important; text-align: center;">Select Products for Final Feed</h1>
-
-
-
+        style="margin-top: 100px !important; text-align: center;">Add Products to Final Feed</h1>
     <div class="card text-center mt-5">
-
         <div class="card-body">
             <h2 class="card-title">Products of {{feed.shop_name}}</h2>
             <form class=""
                   method="POST">
-
                 <button type="submit"
                         name="generate_refresh_submit"
-                        class="btn btn-primary my-2">Generate / Refresh Products from Feed – cleares the selection!!!
+                        class="btn btn-primary my-2">Generate / Refresh Products list based on current Feed and clear
+                    the selection – doesn´t effect Final Feed
                 </button>
-
             </form>
             <button form="add_products_to_final_feed_submit"
                     name="add_products_to_final_feed_submit"
-                    class="btn btn-primary my-2">Add Products to Final Feed / Change Selection
+                    class="btn btn-primary my-2">Add selected Products to Final Feed
             </button>
-
         </div>
-
     </div>
-
+    <div class="float-end">
+        <input type="checkbox"
+               onchange="toggle(this)" /> Select/Deselect All<br />
+    </div>
 
     <form action=""
           id="add_products_to_final_feed_submit"
           method="post"
           class="my-5">
         {% csrf_token %}
-        <table class="w-100">
-            {{ form.as_table }}
+        <table class="w-100 ">
+            <thead>
+                <tr>
+                    <th scope="col">EAN & Product Name</th>
+                    <th scope="col">Select Product</th>
+                </tr>
+            </thead>
+            {% for field in form %}
+            <tbody>
+                <tr class="form-check">
+                    <th>
+                        {{ field.label_tag }}
+                    </th>
+                    <td>
+                        {{ field }}
+                    </td>
+                </tr>
+            </tbody>
+            {% endfor %}
         </table>
     </form>
-
 </div>
 
 {% endblock %}

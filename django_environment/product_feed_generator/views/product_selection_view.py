@@ -5,30 +5,46 @@ import urllib.request
 from urllib.request import Request
 import pprint
 import json
+from dicttoxml import dicttoxml
 from product_feed_generator.models import Feed, Serverkast_Product
 from product_feed_generator.forms import *
 
 
 def product_selection_view(request, shop_name):
     if "add_products_to_final_feed_submit" in request.POST:
+        """
+            TODO-FFC (Final Feed Creator)
+            GET SELECTED PRODUCTS
+            FROM ALL FEEDS
+            NOT JUST Serverkast_Product
+            AND ADD PRODUCTS
+            NOT JUST OVERWRITE
+        """
         form = ProductSelectForFinalFeedForm(request.POST)
         if form.is_valid():
             for key, value in form.cleaned_data.items():
-                Serverkast_Product.objects.filter(name=key).update(is_selected=value)
+                product_name_of_form = key.split(' ––– ')[1]
+                Serverkast_Product.objects.filter(name=product_name_of_form).update(is_selected=value)
         feed = Feed.objects.get(shop_name=shop_name)
-        products = Serverkast_Product.objects.all()
-        context = {"feed": feed, "products": products}
+        all_updated_products = Serverkast_Product.objects.all()
         template = get_template("product_selection_page.html")
-        init = { row.name : row.is_selected for row in products }
+        # has to be identical to field in product_feed_generator/forms/product_select_for_final_feed_form.py
+        init = { "%s ––– %s"%(row.ean,row.name) : row.is_selected for row in all_updated_products }
         form = ProductSelectForFinalFeedForm(init)
         context = {
             "feed": feed,
+            "products": all_updated_products,
             "form": form,
-            "message": 'Products are added to Final Feed now. Generate the Final Feed if ready.'
+            "message": 'Products are added to Final Feed'
         }
         template = get_template("product_selection_page.html")
+        selected_products_from_database = Serverkast_Product.objects.filter(is_selected=True).values()
+        xml = dicttoxml(selected_products_from_database, custom_root='product_final_feed', attr_type=False)
+        f =  open("product_feed_generator/templates/final-feed-file.xml", "wb")
+        f.write(xml)
+        f.close()
         return HttpResponse(template.render(context, request))
-
+    
     elif "generate_refresh_submit" in request.POST:
         feed = Feed.objects.get(shop_name=shop_name)
 
