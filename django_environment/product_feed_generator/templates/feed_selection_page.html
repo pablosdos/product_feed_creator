@@ -28,7 +28,12 @@
 
     <div class="card-body">
       <h2 class="card-title">{{feed.shop_name}}</h2>
+      {% if feed.shop_name == 'Serverkast' %}
       <p>Source: XML URL</p>
+      {% endif %}
+      {% if feed.shop_name == 'TopSystems' %}
+      <p>Source: CSV URL</p>
+      {% endif %}
       <a href="{% url 'product_selection_page' feed.shop_name %}"
          class="btn btn-primary">Open Product Selector for {{feed.shop_name}} Feed</a>
     </div>

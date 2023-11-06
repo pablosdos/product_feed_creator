@@ -12227,9 +12227,13 @@ Custom SCSS
   color: var(--bs-navbar-brand-hover-color);
 }
 
-tr:hover {
+tbody > tr:hover {
   cursor: pointer;
   background-color: var(--bs-primary) !important;
+}
+
+tbody > tr > th {
+  font-weight: 400;
 }
 
 .form-check {

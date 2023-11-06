@@ -10,7 +10,7 @@ from product_feed_generator.models import Serverkast_Product
 def final_feed_view(request):
     if "clear_final_feed_submit" in request.POST:
         xml = dicttoxml({}, custom_root='product_final_feed', attr_type=False)
-        f =  open("product_feed_generator/templates/final-feed-file.xml", "wb")
+        f =  open("product_feed_generator/static/final-feed-file.xml", "wb")
         f.write(xml)
         f.close()
         context = {"message": 'File is cleared'}

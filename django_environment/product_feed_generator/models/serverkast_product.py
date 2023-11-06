@@ -20,7 +20,7 @@ class Serverkast_Product(models.Model):
     extra_image_7 = models.URLField(max_length=511, null=True, blank=True)
     extra_image_8 = models.URLField(max_length=511, null=True, blank=True)
     extra_image_9 = models.URLField(max_length=511, null=True, blank=True)
-    gross_price = models.DecimalField(max_digits=6, decimal_places=2)
+    gross_price = models.DecimalField(max_digits=9, decimal_places=2)
     brand = models.CharField(max_length=63)
     ean = models.CharField(max_length=63)
     current_stock = models.CharField(max_length=63)
