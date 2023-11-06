@@ -9,9 +9,36 @@ from dicttoxml import dicttoxml
 from product_feed_generator.models import Feed, Serverkast_Product, TopSystemsProduct
 from product_feed_generator.forms import *
 from product_feed_generator.views.helper import *
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def product_selection_view(request, shop_name):
-    if "add_products_to_final_feed_submit" in request.POST:
+    if "toggle_auto_refresh_submit" in request.POST:
+        feed = Feed.objects.get(shop_name=shop_name)
+        Feed.objects.filter(shop_name=shop_name).update(products_update_cronjob_active=not feed.products_update_cronjob_active)
+        feed = Feed.objects.get(shop_name=shop_name)
+        template = get_template("product_selection_page.html")
+        if (shop_name == "Serverkast"):
+            current_products = Serverkast_Product.objects.all()
+            # has to be identical to field in product_feed_generator/forms/serverkast_product_select_for_final_feed_form.py
+            init = { "%s ––– %s"%(row.ean,row.name) : row.is_selected for row in current_products }
+            form = ServerkastProductSelectForFinalFeedForm(init)
+            context = {
+                "feed": feed,
+                "form": form,
+            }
+        elif (shop_name == "TopSystems"):
+            current_products = TopSystemsProduct.objects.all()
+            # has to be identical to field in product_feed_generator/forms/serverkast_product_select_for_final_feed_form.py
+            init = { "%s ––– %s"%(row.ean,row.name) : row.is_selected for row in current_products }
+            form = TopSystemsProductSelectForFinalFeedForm(init)
+            context = {
+                "feed": feed,
+                "form": form,
+            }
+        return HttpResponse(template.render(context, request))
+
+    elif "add_products_to_final_feed_submit" in request.POST:
         template = get_template("product_selection_page.html")
         context = add_products_to_final_feed(request, shop_name)
         return HttpResponse(template.render(context, request))

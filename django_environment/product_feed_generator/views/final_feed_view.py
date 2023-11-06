@@ -6,7 +6,9 @@ from urllib.request import Request
 import json
 from dicttoxml import dicttoxml
 from product_feed_generator.models import Serverkast_Product
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def final_feed_view(request):
     if "clear_final_feed_submit" in request.POST:
         xml = dicttoxml({}, custom_root='product_final_feed', attr_type=False)

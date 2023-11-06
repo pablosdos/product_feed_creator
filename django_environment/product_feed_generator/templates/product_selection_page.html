@@ -44,6 +44,25 @@
     <div class="card text-center mt-5">
         <div class="card-body">
             <h2 class="card-title">Products of {{feed.shop_name}}</h2>
+            <p>Last Auto Refresh: {{feed.products_last_updated}}</p>
+            <form 
+                  class=""
+                  method="POST">
+                <button type="submit"
+                        name="toggle_auto_refresh_submit"
+                        class="btn btn-primary my-2">Activate / Disable Auto Refresh
+                </button>
+                
+                {% if feed.products_update_cronjob_active %}
+                <p style="color: green; font-weight: 600;">
+                    active
+                </p>
+                {% elif not feed.products_update_cronjob_active %}
+                <p style="color: red; font-weight: 600;">
+                    not active
+                </p>
+                {% endif %}
+            </form>
             <form class=""
                   method="POST">
                 <button type="submit"

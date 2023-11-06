@@ -130,3 +130,4 @@ STATIC_ROOT = '/Users/paulkluge/Documents/Work/Codebase/Offgridcentrum/product_f
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+LOGIN_URL = '/admin/login/'
