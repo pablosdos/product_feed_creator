@@ -9,7 +9,7 @@ import io
 from decimal import Decimal
 from django.template.loader import get_template
 from product_feed_generator.forms import *
-
+from django.conf import settings
 
 def from_serverkast_feed(request, shop_name):
     form = ServerkastProductSelectForFinalFeedForm(request.POST)
@@ -36,7 +36,7 @@ def from_serverkast_feed(request, shop_name):
     b = [entry for entry in other_selected_products_from_database]
     joined_list = a + b
     xml = dicttoxml(joined_list, custom_root='product_final_feed', attr_type=False)
-    f =  open("product_feed_generator/static/final-feed-file.xml", "wb")
+    f =  open(settings.LOCATION_OF_FINAL_FEED_FILE, "wb")
     f.write(xml)
     f.close()
     return context
@@ -67,7 +67,7 @@ def from_topsystems_feed(request, shop_name):
     b = [entry for entry in other_selected_products_from_database]
     joined_list = a + b
     xml = dicttoxml(joined_list, custom_root='product_final_feed', attr_type=False)
-    f =  open("product_feed_generator/static/final-feed-file.xml", "wb")
+    f =  open(settings.LOCATION_OF_FINAL_FEED_FILE, "wb")
     f.write(xml)
     f.close()
     return context

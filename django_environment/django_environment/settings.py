@@ -121,9 +121,10 @@ STATIC_URL = "static/"
 
 # DEVELOPMENT
 STATIC_ROOT = '/Users/paulkluge/Documents/Work/Codebase/Offgridcentrum/product_feed_creator/django_environment/static'
+LOCATION_OF_FINAL_FEED_FILE = "product_feed_generator/static/final-feed-file.xml"
 # PRODUCTION
 # STATIC_ROOT = '/home/datafeeds/django_environment/static'
-
+# LOCATION_OF_FINAL_FEED_FILE = "static/final-feed-file.xml"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

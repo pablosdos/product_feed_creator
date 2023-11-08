@@ -9,6 +9,7 @@ black = "*"
 urllib3 = "*"
 xmltodict = "*"
 dicttoxml = "*"
+gunicorn = "*"
 
 [dev-packages]
 
