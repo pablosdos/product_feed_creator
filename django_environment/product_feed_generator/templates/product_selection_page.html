@@ -14,45 +14,117 @@
           href="{% static 'custom-bootstrap/custom.css' %}">
     <script src="{% static 'bootstrap-5.3.2/dist/js/bootstrap.js' %}"></script>
 </head>
+<style>
+    .list-group .list-group-item {
+        border-radius: 0;
+        cursor: move;
+    }
+
+    .list-group .list-group-item:hover {
+        background-color: #f7f7f7;
+    }
+</style>
 {% if message %}
 <script>
     alert('{{ message }}');
 </script>
 {% endif %}
-<script>
-    function toggle(source) {
-        var toggler;
-        var allInputs = document.getElementsByTagName("input");
-        if (source.checked == true) {
-            toggler = true;
-        }
-        else if (source.checked == true) {
-            toggler = false;
-        }
-        for (var i = 0, max = allInputs.length; i < max; i++) {
-            if (allInputs[i].type === 'checkbox')
-                allInputs[i].checked = toggler;
-        }
-    }
-</script>
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-xl-10 order-2 order-sm-1 mt-3">
+                <h2 class="h6"><strong>Sortable List</strong></h2>
+                <div id="sortablelist"
+                     class="list-group mb-4 mt-3"
+                     data-id="1">
+                    <div class="list-group-item d-flex align-items-center justify-content-between"
+                         data-id="2">
+                        <div>
+                            <p class="mb-0 d-inline-flex align-items-center">
+                                List Item 1</p>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center justify-content-between"
+                         data-id="3">
+                        <div>
+                            <p class="mb-0 d-inline-flex align-items-center">
+                                List Item 2</p>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center justify-content-between"
+                         data-id="4"
+                         style="">
+                        <div>
+                            <p class="mb-0 d-inline-flex align-items-center">
+                                List Item 3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
     <h1 class="card-title"
         style="margin-top: 100px !important; text-align: center;">Add Products to Final Feed</h1>
+    <p class="d-inline-flex gap-1">
+        <a class="btn btn-primary"
+           data-bs-toggle="collapse"
+           href="#collapseExample"
+           role="button"
+           aria-expanded="false"
+           aria-controls="collapseExample">
+            Import Settings
+        </a>
+    </p>
+    <div class="collapse"
+         id="collapseExample">
+        <div class="card card-body">
+            <form class=""
+                  method="POST">
+                <p>Calculation for the <span style="font-weight: 600;">Retail Price Excluding Tax</span>:</p>
+                <p style="display: inline-block;">{{feed.shop_name}} <span style="font-weight: 600;">Feed Sale
+                        Price</span>
+                    / {{feed_config_form.retail_price_excluding_tax_division_value}} (division value variable) *
+                    {{feed_config_form.retail_price_excluding_tax_multiplication_value}} (multiplication value variable)
+                </p>
+
+                <p>Calculation for the <span style="font-weight: 600;">Cost Price</span>:</p>
+                <p style="display: inline-block;">
+                    {{feed.shop_name}}
+                    {% if feed.shop_name == 'Serverkast' %}
+                    <span style="font-weight: 600;">Feed Sale Price</span> /
+                    {% endif %}
+                    {% if feed.shop_name == 'TopSystems' %}
+                    calculated <span style="font-weight: 600;">Retail Price Excluding Tax</span> /
+                    {% endif %}
+                    {{feed_config_form.cost_price_multiplication_value}} (multiplication value variable)
+                </p><br>
+                <button type="submit"
+                        name="submit_config_update"
+                        class="btn btn-primary my-2">Update Settings
+                </button>
+            </form>
+        </div>
+    </div>
     <div class="card text-center mt-5">
         <div class="card-body">
             <h2 class="card-title">Products of {{feed.shop_name}}</h2>
             <p>Last Auto Refresh: {{feed.products_last_updated}}</p>
-            <form 
-                  class=""
+            <form class=""
                   method="POST">
                 <button type="submit"
                         name="toggle_auto_refresh_submit"
                         class="btn btn-primary my-2">Activate / Disable Auto Refresh
                 </button>
-                
+
                 {% if feed.products_update_cronjob_active %}
                 <p style="color: green; font-weight: 600;">
                     active
@@ -109,5 +181,26 @@
         </table>
     </form>
 </div>
+<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+<script type="text/javascript">
+    new Sortable(sortablelist, {
+        animation: 150,
+        ghostClass: 'sortable-ghost'
+    });
 
+    function toggle(source) {
+        var toggler;
+        var allInputs = document.getElementsByTagName("input");
+        if (source.checked == true) {
+            toggler = true;
+        }
+        else if (source.checked == true) {
+            toggler = false;
+        }
+        for (var i = 0, max = allInputs.length; i < max; i++) {
+            if (allInputs[i].type === 'checkbox')
+                allInputs[i].checked = toggler;
+        }
+    }
+</script>
 {% endblock %}

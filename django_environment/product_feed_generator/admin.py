@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Feed, Serverkast_Product, TopSystemsProduct
+from .models import Feed, FeedConfiguration, Serverkast_Product, TopSystemsProduct
 
 class ServerkastProductAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
@@ -11,5 +11,6 @@ class TopSystemsProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'is_selected')
 
 admin.site.register(Feed)
+admin.site.register(FeedConfiguration)
 admin.site.register(Serverkast_Product, ServerkastProductAdmin)
 admin.site.register(TopSystemsProduct, TopSystemsProductAdmin)

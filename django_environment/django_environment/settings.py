@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-1q0$#d$hz4hwq_z(dk&fgy#v-zo(_*j1kn^fg(s^u4ax!d2our
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'feedcreator.paul-kluge.de', 'feedfusion.nl', 'www.feedfusion.nl']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', 'feedcreator.paul-kluge.de', 'feedfusion.nl', 'www.feedfusion.nl']
 
 
 # Application definition
