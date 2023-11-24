@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% load i18n static %}
+{% block head %}
+
+<head>
+    <title>Product Feed Creator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible"
+          content="ie=edge">
+    <link rel="stylesheet"
+          href="{% static 'custom-bootstrap/custom.css' %}">
+    <script src="{% static 'bootstrap-5.3.2/dist/js/bootstrap.js' %}"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/js/fontawesome.min.js "></script>
+    <link href=" https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css "
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+</head>
+<style>
+    /* .list-group .list-group-item {
+        border-radius: 0;
+        cursor: move;
+    }
+
+    .list-group .list-group-item:hover {
+        background-color: #f7f7f7;
+    } */
+    .handle {
+        cursor: grab;
+    }
+</style>
+{% if message %}
+<script>
+    alert('{{ message }}');
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div id="cloning mt-5"
+         class="row"
+         style="margin-top: 100px !important;">
+        <p class="d-inline-flex gap-1">
+            <a href="{% url 'product_selection_page' shop_name %}"
+               class="btn btn-primary"> Back to Product Selector for {{shop_name}} Feed</a>
+
+        </p>
+        <p style="color: red;">THESE SETTINGS HAVE NO EFFECT YET</p>
+        <div class="container text-center vh-100">
+            <div class="row h-100">
+
+                <div class="col border m-2 h-100">
+                    <h4>Fields</h4>
+                    <div id="example3Right"
+                         class="list-group col">
+                        <div id="sku"
+                        onclick="hide_calculations()"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>SKU
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    onclick="remove_sku()"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                        <div id="description"
+                        onclick="hide_calculations()"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Description
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    onclick="remove_description()"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                        <div id="main_image"
+                        onclick="hide_calculations()"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Main Image
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    onclick="remove_main_image()"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                        <div id="gross_price"
+                        onclick="hide_calculations()"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Gross Price
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    onclick="remove_gross_price()"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                        <div id="current_stock"
+                        onclick="hide_calculations()"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Current Stock
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    onclick="remove_current_stock()"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                        <div id="custom_calculated_field"
+                        onclick="show_calculations()"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Custom
+                            Calculated Field
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    onclick="remove_custom_calculated_field()"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col border m-2 h-100">
+                    <h4>Drop fields here to build your product scheme</h4>
+                    <div id="example3Left"
+                         class="list-group col">
+                        <div id="product_name"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Product Name
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    onclick="remove_product_name()"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col border m-2 h-100">
+                    <h4>Field Settings</h4>
+                    <div id="field_settings" class="list-group col" style="display: none;">
+                        <div id="product_name"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Gross Price
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                        <div id="product_name"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>X
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                        <div id="product_name"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>1.26
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+    <script type="text/javascript">
+
+        function remove_sku() {
+            document.getElementById("sku").remove();
+        }
+        function remove_description() {
+            document.getElementById("description").remove();
+        }
+        function remove_main_image() {
+            document.getElementById("main_image").remove();
+        }
+        function remove_gross_price() {
+            document.getElementById("gross_price").remove();
+        }
+        function remove_current_stock() {
+            document.getElementById("current_stock").remove();
+        }
+        function remove_custom_calculated_field() {
+            document.getElementById("custom_calculated_field").remove();
+        }
+        function remove_product_name() {
+            document.getElementById("product_name").remove();
+        }
+
+        function hide_calculations() {
+            document.getElementById("field_settings").style.display = "none";
+        }
+        function show_calculations() {
+            document.getElementById("field_settings").style.display = "block";
+        }
+
+        new Sortable(example3Left, {
+            handle: '.handle',
+            group: {
+                name: 'shared',
+                pull: 'clone' // To clone: set pull to 'clone'
+            },
+            animation: 150
+        });
+
+        new Sortable(example3Right, {
+            handle: '.handle',
+            group: {
+                name: 'shared',
+                pull: 'clone'
+            },
+            animation: 150
+        });
+
+
+
+        function toggle(source) {
+            var toggler;
+            var allInputs = document.getElementsByTagName("input");
+            if (source.checked == true) {
+                toggler = true;
+            }
+            else if (source.checked == true) {
+                toggler = false;
+            }
+            for (var i = 0, max = allInputs.length; i < max; i++) {
+                if (allInputs[i].type === 'checkbox')
+                    allInputs[i].checked = toggler;
+            }
+        }
+    </script>
+    {% endblock %}

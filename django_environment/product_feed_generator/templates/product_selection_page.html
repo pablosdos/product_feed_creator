@@ -33,55 +33,20 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-9 col-xl-10 order-2 order-sm-1 mt-3">
-                <h2 class="h6"><strong>Sortable List</strong></h2>
-                <div id="sortablelist"
-                     class="list-group mb-4 mt-3"
-                     data-id="1">
-                    <div class="list-group-item d-flex align-items-center justify-content-between"
-                         data-id="2">
-                        <div>
-                            <p class="mb-0 d-inline-flex align-items-center">
-                                List Item 1</p>
-                        </div>
-                    </div>
-                    <div class="list-group-item d-flex align-items-center justify-content-between"
-                         data-id="3">
-                        <div>
-                            <p class="mb-0 d-inline-flex align-items-center">
-                                List Item 2</p>
-                        </div>
-                    </div>
-                    <div class="list-group-item d-flex align-items-center justify-content-between"
-                         data-id="4"
-                         style="">
-                        <div>
-                            <p class="mb-0 d-inline-flex align-items-center">
-                                List Item 3</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-
     <h1 class="card-title"
         style="margin-top: 100px !important; text-align: center;">Add Products to Final Feed</h1>
     <p class="d-inline-flex gap-1">
-        <a class="btn btn-primary"
+        <!-- <a class="btn btn-primary"
            data-bs-toggle="collapse"
            href="#collapseExample"
            role="button"
            aria-expanded="false"
            aria-controls="collapseExample">
             Import Settings
+        </a> -->
+        <a class="btn btn-primary"
+           href="{% url 'manage_product_import_page' feed.shop_name %}">
+            Manage Imports
         </a>
     </p>
     <div class="collapse"
@@ -93,7 +58,8 @@
                 <p style="display: inline-block;">{{feed.shop_name}} <span style="font-weight: 600;">Feed Sale
                         Price</span>
                     / {{feed_config_form.retail_price_excluding_tax_division_value}} (division value variable) *
-                    {{feed_config_form.retail_price_excluding_tax_multiplication_value}} (multiplication value variable)
+                    {{feed_config_form.retail_price_excluding_tax_multiplication_value}} (multiplication value
+                    variable)
                 </p>
 
                 <p>Calculation for the <span style="font-weight: 600;">Cost Price</span>:</p>
@@ -139,7 +105,8 @@
                   method="POST">
                 <button type="submit"
                         name="generate_refresh_submit"
-                        class="btn btn-primary my-2">Generate / Refresh Products list based on current Feed and clear
+                        class="btn btn-primary my-2">Generate / Refresh Products list based on current Feed and
+                    clear
                     the selection – doesn´t effect Final Feed
                 </button>
             </form>
@@ -183,10 +150,25 @@
 </div>
 <script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
 <script type="text/javascript">
-    new Sortable(sortablelist, {
-        animation: 150,
-        ghostClass: 'sortable-ghost'
+
+
+    new Sortable(example3Left, {
+        group: {
+            name: 'shared',
+            pull: 'clone' // To clone: set pull to 'clone'
+        },
+        animation: 150
     });
+
+    new Sortable(example3Right, {
+        group: {
+            name: 'shared',
+            pull: 'clone'
+        },
+        animation: 150
+    });
+
+
 
     function toggle(source) {
         var toggler;
