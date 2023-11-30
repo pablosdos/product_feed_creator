@@ -36,7 +36,7 @@ class Command(BaseCommand):
             # print(data)
             for item in data:
                 price_original = Decimal(item[21].split(" EUR")[0].strip(' "'))
-                gross_price = ( price_original  / 121 ) * 100
+                sales_price_excluding_tax = ( price_original  / 121 ) * 100
                 TopSystemsProduct.objects.create(
                     feed=feed,
                     is_selected=False,
@@ -45,7 +45,7 @@ class Command(BaseCommand):
                     long_description=item[7],
                     main_image=item[11],
                     extra_image_1=item[0],
-                    gross_price=gross_price,
+                    sales_price_excluding_tax=sales_price_excluding_tax,
                     shipping_weight=Decimal(item[25].split(" kg")[0].strip(' "')),
                     brand=item[1],
                     ean=item[8],

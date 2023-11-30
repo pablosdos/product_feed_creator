@@ -51,7 +51,7 @@ def from_serverkast_feed(request, shop_name):
                 extra_image_7=item.get("extra_image_7", None),
                 extra_image_8=item.get("extra_image_8", None),
                 extra_image_9=item.get("extra_image_9", None),
-                gross_price=item["gross_price"],
+                sales_price_excluding_tax=item["gross_price"],
                 brand=item["brand"],
                 ean=item.get("ean", "empty"),
                 current_stock=item["current_stock"],
@@ -88,8 +88,7 @@ def from_topsystems_feed(request, shop_name):
     data = list(csvfile)
     # print(data)
     for item in data:
-        price_original = Decimal(item[21].split(" EUR")[0].strip(' "'))
-        gross_price = ( price_original  / 121 ) * 100
+        sales_price_excluding_tax = Decimal(item[21].split(" EUR")[0].strip(' "'))
         TopSystemsProduct.objects.create(
             feed=feed,
             is_selected=False,
@@ -98,7 +97,7 @@ def from_topsystems_feed(request, shop_name):
             long_description=item[7],
             main_image=item[11],
             extra_image_1=item[0],
-            gross_price=gross_price,
+            sales_price_excluding_tax=sales_price_excluding_tax,
             shipping_weight=Decimal(item[25].split(" kg")[0].strip(' "')),
             brand=item[1],
             ean=item[8],

@@ -52,63 +52,16 @@
         <p style="color: red;">THESE SETTINGS HAVE NO EFFECT YET</p>
         <div class="container text-center vh-100">
             <div class="row h-100">
-
+                <!--
+                    Selectable
+                    Fields
+                -->
                 <div class="col border m-2 h-100">
                     <h4>Fields</h4>
                     <div id="example3Right"
                          class="list-group col">
-                        <div id="sku"
-                        onclick="hide_calculations()"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>SKU
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    onclick="remove_sku()"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
-                        </div>
-                        <div id="description"
-                        onclick="hide_calculations()"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Description
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    onclick="remove_description()"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
-                        </div>
-                        <div id="main_image"
-                        onclick="hide_calculations()"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Main Image
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    onclick="remove_main_image()"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
-                        </div>
-                        <div id="gross_price"
-                        onclick="hide_calculations()"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Gross Price
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    onclick="remove_gross_price()"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
-                        </div>
-                        <div id="current_stock"
-                        onclick="hide_calculations()"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Current Stock
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    onclick="remove_current_stock()"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
-                        </div>
                         <div id="custom_calculated_field"
-                        onclick="show_calculations()"
+                             onclick="show_calculations()"
                              class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Custom
                             Calculated Field
                             <button class="btn btn-danger btn-sm rounded-0 float-end"
@@ -118,8 +71,25 @@
                                     data-placement="top"
                                     title="Delete"><i class="bi bi-trash"></i></button>
                         </div>
+                        {% for field in fields %}
+                        <div id="sku"
+                             onclick="hide_calculations()"
+                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>{{field}}
+                            <button class="btn btn-danger btn-sm rounded-0 float-end"
+                                    onclick="remove_sku()"
+                                    type="button"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
+                <!--
+                    Destination
+                    for
+                    Fields
+                -->
                 <div class="col border m-2 h-100">
                     <h4>Drop fields here to build your product scheme</h4>
                     <div id="example3Left"
@@ -135,9 +105,16 @@
                         </div>
                     </div>
                 </div>
+                <!--
+                    Settings
+                    for
+                    Fields
+                -->
                 <div class="col border m-2 h-100">
                     <h4>Field Settings</h4>
-                    <div id="field_settings" class="list-group col" style="display: none;">
+                    <div id="field_settings"
+                         class="list-group col"
+                         style="display: none;">
                         <div id="product_name"
                              class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Gross Price
                             <button class="btn btn-danger btn-sm rounded-0 float-end"

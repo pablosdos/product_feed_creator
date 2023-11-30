@@ -10,8 +10,15 @@ from decimal import Decimal
 from django.template.loader import get_template
 from product_feed_generator.forms import *
 from django.conf import settings
+from .apply_configuration_scheme import *
 
 def from_serverkast_feed(request, shop_name):
+    """
+    check
+    products (in db)
+    by
+    form
+    """
     form = ServerkastProductSelectForFinalFeedForm(request.POST)
     if form.is_valid():
         for key, value in form.cleaned_data.items():
@@ -29,12 +36,22 @@ def from_serverkast_feed(request, shop_name):
         "form": form,
         "message": 'Products are added to Final Feed'
     }
+    """
+    create
+    final
+    feed
+    from
+    checked
+    products (in db)
+    """
     template = get_template("product_selection_page.html")
-    selected_products_from_database = TopSystemsProduct.objects.filter(is_selected=True).values()
-    a = [entry for entry in selected_products_from_database]
-    other_selected_products_from_database = Serverkast_Product.objects.filter(is_selected=True).values()
-    b = [entry for entry in other_selected_products_from_database]
-    joined_list = a + b
+    selected_products_from_topsystems_products_list = TopSystemsProduct.objects.filter(is_selected=True).values()
+    complete_topsystems_products_list = [entry for entry in selected_products_from_topsystems_products_list]
+    configured_topsystems_products_list = apply_topsystems_configuration_scheme(complete_topsystems_products_list)
+    selected_products_from_serverkast_products_list = Serverkast_Product.objects.filter(is_selected=True).values()
+    complete_serverkast_products_list = [entry for entry in selected_products_from_serverkast_products_list]
+    configured_serverkast_products_list = apply_serverkast_configuration_scheme(complete_serverkast_products_list)
+    joined_list = configured_topsystems_products_list + configured_serverkast_products_list
     xml = dicttoxml(joined_list, custom_root='product_final_feed', attr_type=False)
     f =  open(settings.LOCATION_OF_FINAL_FEED_FILE, "wb")
     f.write(xml)
@@ -43,6 +60,12 @@ def from_serverkast_feed(request, shop_name):
 
 
 def from_topsystems_feed(request, shop_name):
+    """
+    check
+    products (in db)
+    by
+    form
+    """
     form = TopSystemsProductSelectForFinalFeedForm(request.POST)
     if form.is_valid():
         for key, value in form.cleaned_data.items():
@@ -60,12 +83,22 @@ def from_topsystems_feed(request, shop_name):
         "form": form,
         "message": 'Products are added to Final Feed'
     }
+    """
+    create
+    final
+    feed
+    from
+    checked
+    products (in db)
+    """
     template = get_template("product_selection_page.html")
-    selected_products_from_database = TopSystemsProduct.objects.filter(is_selected=True).values()
-    a = [entry for entry in selected_products_from_database]
-    other_selected_products_from_database = Serverkast_Product.objects.filter(is_selected=True).values()
-    b = [entry for entry in other_selected_products_from_database]
-    joined_list = a + b
+    selected_products_from_topsystems_products_list = TopSystemsProduct.objects.filter(is_selected=True).values()
+    complete_topsystems_products_list = [entry for entry in selected_products_from_topsystems_products_list]
+    configured_topsystems_products_list = apply_topsystems_configuration_scheme(complete_topsystems_products_list)
+    selected_products_from_serverkast_products_list = Serverkast_Product.objects.filter(is_selected=True).values()
+    complete_serverkast_products_list = [entry for entry in selected_products_from_serverkast_products_list]
+    configured_serverkast_products_list = apply_serverkast_configuration_scheme(complete_serverkast_products_list)
+    joined_list = configured_topsystems_products_list + configured_serverkast_products_list
     xml = dicttoxml(joined_list, custom_root='product_final_feed', attr_type=False)
     f =  open(settings.LOCATION_OF_FINAL_FEED_FILE, "wb")
     f.write(xml)

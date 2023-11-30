@@ -11,7 +11,7 @@ class FinalFeedProduct(models.Model):
     name = models.CharField(max_length=127)
     short_desc = models.CharField(max_length=127)
     long_description = models.CharField(max_length=2055)
-    gross_price = models.DecimalField(max_digits=6, decimal_places=2)
+    sales_price_excluding_tax = models.DecimalField(max_digits=6, decimal_places=2)
     brand = models.CharField(max_length=63)
     ean = models.CharField(max_length=63)
     current_stock = models.CharField(max_length=63)

@@ -33,7 +33,7 @@ class Command(BaseCommand):
             items = data["rss"]["channel"]["item"]
             Serverkast_Product.objects.all().delete()
             for item in items:
-                if not ("gross_price" in item):
+                if not ("sales_price_excluding_tax" in item):
                     pass
                     # print('item gross price is empty for')
                     # print(item["name"])
@@ -55,7 +55,7 @@ class Command(BaseCommand):
                         extra_image_7=item.get("extra_image_7", None),
                         extra_image_8=item.get("extra_image_8", None),
                         extra_image_9=item.get("extra_image_9", None),
-                        gross_price=item["gross_price"],
+                        sales_price_excluding_tax=item["sales_price_excluding_tax"],
                         brand=item["brand"],
                         ean=item.get("ean", "empty"),
                         current_stock=item["current_stock"],

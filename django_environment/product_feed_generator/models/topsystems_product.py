@@ -13,7 +13,7 @@ class TopSystemsProduct(models.Model):
     shipping_weight = models.DecimalField(max_digits=7, decimal_places=2)
     main_image = models.URLField(max_length=511, null=True, blank=True)
     extra_image_1 = models.URLField(max_length=511, null=True, blank=True)
-    gross_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Gross Price – calculated from original Price')
+    sales_price_excluding_tax = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Gross Price – calculated from original Price')
     brand = models.CharField(max_length=63)
     ean = models.CharField(max_length=63)
     current_stock = models.CharField(max_length=63)
