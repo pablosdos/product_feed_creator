@@ -1,5 +1,10 @@
 from urllib.request import Request
-from product_feed_generator.models import Feed, Serverkast_Product, TopSystemsProduct
+from product_feed_generator.models import (
+    Feed,
+    FeedConfiguration,
+    Serverkast_Product,
+    TopSystemsProduct,
+)
 import urllib.request
 import xmltodict
 from dicttoxml import dicttoxml
@@ -47,10 +52,12 @@ def from_serverkast_feed(request, shop_name):
     template = get_template("product_selection_page.html")
     selected_products_from_topsystems_products_list = TopSystemsProduct.objects.filter(is_selected=True).values()
     complete_topsystems_products_list = [entry for entry in selected_products_from_topsystems_products_list]
-    configured_topsystems_products_list = apply_topsystems_configuration_scheme(complete_topsystems_products_list)
+    configured_topsystems_products_list = apply_configuration_scheme(complete_topsystems_products_list, 'TopSystems')
     selected_products_from_serverkast_products_list = Serverkast_Product.objects.filter(is_selected=True).values()
+    #convert queryset to list
     complete_serverkast_products_list = [entry for entry in selected_products_from_serverkast_products_list]
-    configured_serverkast_products_list = apply_serverkast_configuration_scheme(complete_serverkast_products_list)
+    # print(complete_serverkast_products_list)
+    configured_serverkast_products_list = apply_configuration_scheme(complete_serverkast_products_list, 'Serverkast')
     joined_list = configured_topsystems_products_list + configured_serverkast_products_list
     xml = dicttoxml(joined_list, custom_root='product_final_feed', attr_type=False)
     f =  open(settings.LOCATION_OF_FINAL_FEED_FILE, "wb")
@@ -94,10 +101,10 @@ def from_topsystems_feed(request, shop_name):
     template = get_template("product_selection_page.html")
     selected_products_from_topsystems_products_list = TopSystemsProduct.objects.filter(is_selected=True).values()
     complete_topsystems_products_list = [entry for entry in selected_products_from_topsystems_products_list]
-    configured_topsystems_products_list = apply_topsystems_configuration_scheme(complete_topsystems_products_list)
+    configured_topsystems_products_list = apply_configuration_scheme(complete_topsystems_products_list, 'TopSystems')
     selected_products_from_serverkast_products_list = Serverkast_Product.objects.filter(is_selected=True).values()
     complete_serverkast_products_list = [entry for entry in selected_products_from_serverkast_products_list]
-    configured_serverkast_products_list = apply_serverkast_configuration_scheme(complete_serverkast_products_list)
+    configured_serverkast_products_list = apply_configuration_scheme(complete_serverkast_products_list, 'Serverkast')
     joined_list = configured_topsystems_products_list + configured_serverkast_products_list
     xml = dicttoxml(joined_list, custom_root='product_final_feed', attr_type=False)
     f =  open(settings.LOCATION_OF_FINAL_FEED_FILE, "wb")

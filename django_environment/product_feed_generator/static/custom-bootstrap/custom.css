@@ -12247,4 +12247,11 @@ tbody > tr > th {
   margin-left: -1.5em;
 }
 
+#customDragDropArea1, #customDragDropArea2, #customDragDropArea3 {
+  border: solid;
+  min-height: 600px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 /*# sourceMappingURL=custom.css.map */

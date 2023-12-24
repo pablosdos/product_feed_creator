@@ -47,172 +47,338 @@
         <p class="d-inline-flex gap-1">
             <a href="{% url 'product_selection_page' shop_name %}"
                class="btn btn-primary"> Back to Product Selector for {{shop_name}} Feed</a>
-
         </p>
-        <p style="color: red;">THESE SETTINGS HAVE NO EFFECT YET</p>
-        <div class="container text-center">
-            <div class="row h-100">
-                <!--
+
+        <form action=""
+              method="POST"
+              class="form-example">
+            <div class="form-example"
+                 style="display: none;">
+                <label for="name">Enter your name: </label>
+                <input type="text"
+                       name="finalFeedProductSchemaStringInput"
+                       id="finalFeedProductSchemaStringInput"
+                       required />
+                <input type="text"
+                       name="finalFeedProductSchemaStringInput1"
+                       id="finalFeedProductSchemaStringInput1"
+                       required />
+                <input type="text"
+                       name="finalFeedProductSchemaStringInput2"
+                       id="finalFeedProductSchemaStringInput2"
+                       required />
+                <input type="text"
+                       name="shopName"
+                       value="{{shop_name}}"
+                       required />
+            </div>
+            <div class="form-example">
+                <input type="submit"
+                       name="save-schema-config"
+                       value="Save Schema" />
+                <p class="my-4">{% if update_message %}
+                    {{update_message}}
+                    {% endif %}</p>
+            </div>
+
+            <div class="container text-center">
+                <div class="row h-100">
+                    <!--
                     Selectable
                     Fields
                 -->
-                <div class="col border m-2 h-100">
-                    <h4>Fields</h4>
-                    <div id="example3Right"
-                         class="list-group col">
-                        <div id="custom_calculated_field"
-                             onclick="show_calculations()"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Custom
-                            Calculated Field
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    onclick="remove_custom_calculated_field()"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
+                    <div class="col border m-2"
+                         style="min-height: 150vh;">
+                        <h4 class="my-3">Fields</h4>
+                        <div id="availableFieldsElement"
+                             class="list-group col">
+                            {% for field in availableFields %}
+                            <div id="{{field}}"
+                                 class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>{{field}}
+                                <button class="btn btn-danger btn-sm rounded-0 float-end trash-button"
+                                        onclick="removeThisElementFromFinalFeedSchema(this)"
+                                        type="button"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Delete"><i class="bi bi-trash"></i></button>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% for field in fields %}
-                        <div id="sku"
-                             onclick="hide_calculations()"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>{{field}}
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    onclick="remove_sku()"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        <h4 class="my-3">Operators</h4>
+                        <div id="operatorsElement"
+                             class="list-group col">
+                            {% for operation in operators %}
+                            <div id="{{operation.0}}"
+                                 class="list-group-item"><i
+                                   class="bi bi-arrows-move handle float-start"></i>{{operation.1}}
+                                <button class="btn btn-danger btn-sm rounded-0 float-end trash-button"
+                                        onclick="removeThisElementFromFinalFeedSchema(this)"
+                                        type="button"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Delete"><i class="bi bi-trash"></i></button>
+                                {% if operation.0 == 'custom_value' %}
+                                <label>put value before dragging</label>
+                                <input type="text"
+                                       name="{{operation.0}}" />
+                                {% endif %}
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </div>
-                </div>
-                <!--
+                    <!--
                     Destination
                     for
                     Fields
                 -->
-                <div class="col border m-2 h-100">
-                    <h4>Drop fields here to build your product scheme</h4>
-                    <div id="example3Left"
-                         class="list-group col">
-                        <div id="product_name"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Product Name
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    onclick="remove_product_name()"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
+                    <div class="col border m-2">
+                        <h4 class="my-3">Drop fields here to build your product schema</h4>
+                        <div id="finalFeedSchemaElement"
+                             class="list-group col"
+                             ondrop="addToFinalFeedSchema(this)">
+                            {% for field in current_product_schema_for_final_feed %}
+                            <div id="{{field}}"
+                                 class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>{{field}}
+                                <button class="btn btn-danger btn-sm rounded-0 float-end trash-button"
+                                        onclick="removeThisElementFromFinalFeedSchema(this)"
+                                        type="button"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Delete"><i class="bi bi-trash"></i></button>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
-                </div>
-                <!--
+                    <!--
                     Settings
                     for
                     Fields
-                -->
-                <div class="col border m-2 h-100">
-                    <h4>Field Settings</h4>
-                    <div id="field_settings"
-                         class="list-group col"
-                         style="display: none;">
-                        <div id="product_name"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>Gross Price
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
+                    -->
+                    <div class="col border m-2">
+                        <h4 class="my-3">Custom Calculation Field</h4>
+                        <!-- <p>up to 3 custom fields</p> -->
+                        <!-- <button type="button"
+                            onclick="addElement()">+</button> -->
+                        <!-- Custom Calc Field 1 -->
+                        <div class="form-example my-3">
+                            <label for="name">Field Name: </label>
+                            <input type="text"
+                                   onchange="addToCustomDragDropArea1Element(this)"
+                                   id="customCalculatorField1NameInput"
+                                   placeholder="{{CustomCalcFieldName}}"
+                                   value="{{CustomCalcFieldName}}" />
                         </div>
-                        <div id="product_name"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>X
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        <div class="list-group col">
+                            <!-- custom drag & drop areas emerge here -->
+                            <div id="customDragDropArea1Element"
+                                 class="list-group col"
+                                 ondrop="addToCustomDragDropArea1Element(this)">
+                                {% for field in CustomCalcFieldParts %}
+                                <div id="{{field}}"
+                                     class="list-group-item"><i
+                                       class="bi bi-arrows-move handle float-start"></i>{{field}}
+                                    <button class="btn btn-danger btn-sm rounded-0 float-end trash-button"
+                                            onclick="removeThisElementFromFinalFeedSchema(this)"
+                                            type="button"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Delete"><i class="bi bi-trash"></i></button>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                        <div id="product_name"
-                             class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>1.26
-                            <button class="btn btn-danger btn-sm rounded-0 float-end"
-                                    type="button"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="Delete"><i class="bi bi-trash"></i></button>
+                        <!-- Custom Calc Field 2 -->
+                        <div class="form-example my-3">
+                            <label for="name">Field Name: </label>
+                            <input type="text"
+                                   onchange="addToCustomDragDropArea2Element(this)"
+                                   id="customCalculatorField2NameInput"
+                                   placeholder="{{CustomCalcFieldName2}}"
+                                   value="{{CustomCalcFieldName2}}" />
+                        </div>
+                        <div class="list-group col">
+                            <!-- custom drag & drop areas emerge here -->
+                            <div id="customDragDropArea2Element"
+                                 class="list-group col"
+                                 ondrop="addToCustomDragDropArea2Element(this)">
+                                {% for field in CustomCalcFieldParts2 %}
+                                <div id="{{field}}"
+                                     class="list-group-item"><i
+                                       class="bi bi-arrows-move handle float-start"></i>{{field}}
+                                    <button class="btn btn-danger btn-sm rounded-0 float-end trash-button"
+                                            onclick="removeThisElementFromFinalFeedSchema(this)"
+                                            type="button"
+                                            data-toggle="tooltip"
+                                            data-placement="top"
+                                            title="Delete"><i class="bi bi-trash"></i></button>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
+        </form>
     </div>
+</div>
 
+<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+<script type="text/javascript">
 
-
-    <script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
-    <script type="text/javascript">
-
-        function remove_sku() {
-            document.getElementById("sku").remove();
+    function updateFinalFeedSchema() {
+        var final_feed_schema = [];
+        var final_feed_schema_1 = [];
+        var final_feed_schema_2 = [];
+        // add custom culcaltion field to final feed schema – CUSTOM CULCALTION FIELD 1
+        var custom_calculation_field_1 = [];
+        var partsOfCustomCalcField = document.querySelectorAll("#customDragDropArea1Element .list-group-item");
+        custom_calculation_field_1.push(document.getElementById('customCalculatorField1NameInput').value);
+        for (i = 0; i < partsOfCustomCalcField.length; i++) {
+            if (partsOfCustomCalcField[i].id == 'custom_value') {
+                custom_calculation_field_1.push("custom_value_" + document.querySelectorAll("#operatorsElement input")[0].value);
+            } else custom_calculation_field_1.push(partsOfCustomCalcField[i].id);
         }
-        function remove_description() {
-            document.getElementById("description").remove();
+        var custom_calculation_field_1 = custom_calculation_field_1.join("-");
+        final_feed_schema_1.push(custom_calculation_field_1);
+        // add custom culcaltion field to final feed schema – CUSTOM CULCALTION FIELD 2
+        var custom_calculation_field_2 = [];
+        var partsOfCustomCalcField = document.querySelectorAll("#customDragDropArea2Element .list-group-item");
+        custom_calculation_field_2.push(document.getElementById('customCalculatorField2NameInput').value);
+        for (i = 0; i < partsOfCustomCalcField.length; i++) {
+            if (partsOfCustomCalcField[i].id == 'custom_value') {
+                custom_calculation_field_2.push("custom_value_" + document.querySelectorAll("#operatorsElement input")[0].value);
+            } else custom_calculation_field_2.push(partsOfCustomCalcField[i].id);
         }
-        function remove_main_image() {
-            document.getElementById("main_image").remove();
+        var custom_calculation_field_2 = custom_calculation_field_2.join("-");
+        final_feed_schema_2.push(custom_calculation_field_2);
+        // add original fields to final feed schema
+        var fieldsForFinalFeedSchema = document.querySelectorAll("#finalFeedSchemaElement .list-group-item");
+        for (i = 0; i < fieldsForFinalFeedSchema.length; i++) {
+            final_feed_schema.push(fieldsForFinalFeedSchema[i].id);
         }
-        function remove_gross_price() {
-            document.getElementById("gross_price").remove();
-        }
-        function remove_current_stock() {
-            document.getElementById("current_stock").remove();
-        }
-        function remove_custom_calculated_field() {
-            document.getElementById("custom_calculated_field").remove();
-        }
-        function remove_product_name() {
-            document.getElementById("product_name").remove();
-        }
+        // console.log(custom_calculation_field_1);
+        console.log(final_feed_schema)
+        document.getElementById('finalFeedProductSchemaStringInput').value = final_feed_schema;
+        document.getElementById('finalFeedProductSchemaStringInput1').value = final_feed_schema_1;
+        document.getElementById('finalFeedProductSchemaStringInput2').value = final_feed_schema_2;
+    }
 
-        function hide_calculations() {
-            document.getElementById("field_settings").style.display = "none";
-        }
-        function show_calculations() {
-            document.getElementById("field_settings").style.display = "block";
-        }
-
-        new Sortable(example3Left, {
-            handle: '.handle',
-            group: {
-                name: 'shared',
-                pull: 'clone' // To clone: set pull to 'clone'
-            },
-            animation: 150
-        });
-
-        new Sortable(example3Right, {
-            handle: '.handle',
-            group: {
-                name: 'shared',
-                pull: 'clone'
-            },
-            animation: 150
-        });
-
-
-
-        function toggle(source) {
-            var toggler;
-            var allInputs = document.getElementsByTagName("input");
-            if (source.checked == true) {
-                toggler = true;
+    function updateVisibiltyOfTrashButtons() {
+        var trashButtons = document.getElementsByClassName('trash-button');
+        var availableFieldsElement = document.getElementById('availableFieldsElement');
+        var finalFeedSchemaElement = document.getElementById('finalFeedSchemaElement');
+        var customDragDropArea1Element = document.getElementById('customDragDropArea1Element');
+        var customDragDropArea2Element = document.getElementById('customDragDropArea2Element');
+        for (var i = 0; i < trashButtons.length; i++) {
+            if (availableFieldsElement.contains(trashButtons.item(i))) {
+                trashButtons.item(i).style.visibility = 'hidden';
             }
-            else if (source.checked == true) {
-                toggler = false;
+            if (operatorsElement.contains(trashButtons.item(i))) {
+                trashButtons.item(i).style.visibility = 'hidden';
             }
-            for (var i = 0, max = allInputs.length; i < max; i++) {
-                if (allInputs[i].type === 'checkbox')
-                    allInputs[i].checked = toggler;
+            if (finalFeedSchemaElement.contains(trashButtons.item(i))) {
+                trashButtons.item(i).style.visibility = 'visible';
+            }
+            if (customDragDropArea1Element.contains(trashButtons.item(i))) {
+                trashButtons.item(i).style.visibility = 'visible';
+            }
+            if (customDragDropArea2Element.contains(trashButtons.item(i))) {
+                trashButtons.item(i).style.visibility = 'visible';
             }
         }
-    </script>
-    {% endblock %}
+    }
+
+    //remove the element which is clicked on
+    function removeThisElementFromFinalFeedSchema(element) {
+        element.parentElement.remove();
+        updateFinalFeedSchema()
+    }
+
+    addToFinalFeedSchema()
+    function addToFinalFeedSchema() {
+        //hide trash buttons on the left
+        updateVisibiltyOfTrashButtons()
+        //add to final feed schema
+        updateFinalFeedSchema()
+    }
+
+    function addToCustomDragDropArea1Element() {
+        //show trash buttons in the custom area
+        updateVisibiltyOfTrashButtons()
+        //add to final feed schema
+        updateFinalFeedSchema()
+    }
+
+    function addToCustomDragDropArea2Element() {
+        //show trash buttons in the custom area
+        updateVisibiltyOfTrashButtons()
+        //add to final feed schema
+        updateFinalFeedSchema()
+    }
+
+    // function addElement() {
+    //     var customCalcDragDropArea = '<div id="{{field}}" onclick="hide_calculations()" class="list-group-item"><i class="bi bi-arrows-move handle float-start"></i>sdfsdfdsf <button class="btn btn-danger btn-sm rounded-0 float-end trash-button" onclick="removeThisElementFromFinalFeedSchema(this)" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="bi bi-trash"></i></button> </div>'
+    //     // document.getElementById("field_settings").innerHTML = customCalcDragDropArea;
+    //     var customDragDropAreaName = 'customDragDropArea1'
+    //     document.getElementById("field_settings").appendChild(
+    //         Object.assign(
+    //             document.createElement('div'),
+    //             { id: 'customDragDropArea1' },
+    //             // { ondrag: 'hide_calculations()' },
+    //             // { class: 'list-group col' },
+    //             // { innerHTML: customCalcDragDropArea },
+    //         )
+    //     );
+    //     document.getElementById("field_settings").classList.add('list-group', 'col');
+    // }
+
+    new Sortable(availableFieldsElement, {
+        handle: '.handle',
+        group: {
+            name: 'shared',
+            pull: 'clone',
+            put: false
+        },
+        animation: 150,
+        sort: false
+    });
+
+    new Sortable(operatorsElement, {
+        handle: '.handle',
+        group: {
+            name: 'shared',
+            pull: 'clone',
+            put: false
+        },
+        animation: 150,
+        sort: false
+    });
+
+    new Sortable(finalFeedSchemaElement, {
+        handle: '.handle',
+        group: {
+            name: 'shared',
+            pull: 'clone'
+        },
+        animation: 150
+    });
+
+    new Sortable(customDragDropArea1Element, {
+        handle: '.handle',
+        group: {
+            name: 'shared',
+            pull: 'clone'
+        },
+        animation: 150
+    });
+
+    new Sortable(customDragDropArea2Element, {
+        handle: '.handle',
+        group: {
+            name: 'shared',
+            pull: 'clone'
+        },
+        animation: 150
+    });
+
+</script>
+{% endblock %}
