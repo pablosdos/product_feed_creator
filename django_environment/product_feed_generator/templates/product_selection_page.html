@@ -90,7 +90,6 @@
                         name="toggle_auto_refresh_submit"
                         class="btn btn-primary my-2">Activate / Disable Auto Refresh
                 </button>
-
                 {% if feed.products_update_cronjob_active %}
                 <p style="color: green; font-weight: 600;">
                     active
@@ -101,15 +100,7 @@
                 </p>
                 {% endif %}
             </form>
-            <form class=""
-                  method="POST">
-                <button type="submit"
-                        name="generate_refresh_submit"
-                        class="btn btn-primary my-2">Generate / Refresh Products list based on current Feed and
-                    clear
-                    the selection – doesn´t effect Final Feed
-                </button>
-            </form>
+            {% include "include_blocks/generate_product_list_button.html" %}
             <button form="add_products_to_final_feed_submit"
                     name="add_products_to_final_feed_submit"
                     class="btn btn-primary my-2">Add selected Products to Final Feed

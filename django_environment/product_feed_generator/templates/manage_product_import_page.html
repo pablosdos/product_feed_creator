@@ -48,7 +48,34 @@
             <a href="{% url 'product_selection_page' shop_name %}"
                class="btn btn-primary"> Back to Product Selector for {{shop_name}} Feed</a>
         </p>
-
+        {% if shop_name == 'IngramMicro' %}
+        <p class="d-inline-flex gap-1">
+            <button class="btn btn-primary"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample"
+                    aria-expanded="false"
+                    aria-controls="collapseExample">
+                Add Credentials for protected Product Feed
+            </button>
+        </p>
+        <div class="collapse"
+             id="collapseExample">
+            <div class="my-2"
+                 style="border: solid; border-width: 1px;">
+                <form class=""
+                      method="POST">
+                    <div class="modal-body">
+                        {{ credentials_form.as_p }}
+                    </div>
+                    <input class="my-2"
+                           type="submit"
+                           name="save-protection-credentials"
+                           value="Save SFTP and XML Credentials" />
+                </form>
+            </div>
+        </div>
+        {% endif %}
         <form action=""
               method="POST"
               class="form-example">
@@ -217,6 +244,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </form>
     </div>
 </div>

@@ -27,12 +27,7 @@
 
     <div class="card-body">
       <h2 class="card-title">{{feed.shop_name}}</h2>
-      {% if feed.shop_name == 'Serverkast' %}
       <p>Source: {{feed.input_type}}</p>
-      {% endif %}
-      {% if feed.shop_name == 'TopSystems' %}
-      <p>Source: {{feed.input_type}}</p>
-      {% endif %}
       <a href="{% url 'product_selection_page' feed.shop_name %}"
          class="btn btn-primary">Open Product Selector for {{feed.shop_name}} Feed</a>
     </div>

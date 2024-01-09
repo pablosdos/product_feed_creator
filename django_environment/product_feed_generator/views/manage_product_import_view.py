@@ -1,10 +1,12 @@
 from django.template.loader import get_template
 from django.http import HttpResponse
+from product_feed_generator.forms import *
 from product_feed_generator.models import (
     Feed,
     FeedConfiguration,
     Serverkast_Product,
     TopSystemsProduct,
+    IngramMicroProduct,
 )
 from django.contrib.auth.decorators import login_required
 
@@ -20,27 +22,39 @@ OPERATORS = [
 @login_required
 def manage_product_import_view(request, shop_name):
     feed_from_current_shop = Feed.objects.get(shop_name=shop_name)
+    feed_conf_from_current_shop = FeedConfiguration.objects.get(
+        feed=feed_from_current_shop
+    )
     context = {}
     if "save-schema-config" in request.POST:
-        selected_fields_for_final_feed = request.POST.get(
-            "finalFeedProductSchemaStringInput", "[]"
-        )
-        original_fields_for_final_feed_1 = request.POST.get(
-            "finalFeedProductSchemaStringInput1", "[]"
-        )
-        original_fields_for_final_feed_2 = request.POST.get(
-            "finalFeedProductSchemaStringInput2", "[]"
+        FeedConfiguration.objects.filter(feed=feed_from_current_shop).update(
+            product_schema_for_final_feed=request.POST.get(
+                "finalFeedProductSchemaStringInput", "[]"
+            )
         )
         FeedConfiguration.objects.filter(feed=feed_from_current_shop).update(
-            product_schema_for_final_feed=selected_fields_for_final_feed
+            custom_calculated_field_1=request.POST.get(
+                "finalFeedProductSchemaStringInput1", "[]"
+            )
         )
         FeedConfiguration.objects.filter(feed=feed_from_current_shop).update(
-            custom_calculated_field_1=original_fields_for_final_feed_1
-        )
-        FeedConfiguration.objects.filter(feed=feed_from_current_shop).update(
-            custom_calculated_field_2=original_fields_for_final_feed_2
+            custom_calculated_field_2=request.POST.get(
+                "finalFeedProductSchemaStringInput2", "[]"
+            )
         )
         context.update({"update_message": "Schema updated!"}),
+    if "save-protection-credentials" in request.POST:
+        print(request.POST.get("xml_pass", ""))
+        FeedConfiguration.objects.filter(feed=feed_from_current_shop).update(
+            xml_user=request.POST.get("xml_user", "")
+        )
+        FeedConfiguration.objects.filter(feed=feed_from_current_shop).update(
+            xml_pass=request.POST.get("xml_pass", "")
+        )
+        FeedConfiguration.objects.filter(feed=feed_from_current_shop).update(
+            sftp_url=request.POST.get("sftp_url", "")
+        )
+        context.update({"update_message": "Protection credentials updated!"}),
     current_product_schema_for_final_feed = FeedConfiguration.objects.get(
         feed=feed_from_current_shop
     ).product_schema_for_final_feed
@@ -55,6 +69,8 @@ def manage_product_import_view(request, shop_name):
         allFieldsOfProduct = Serverkast_Product._meta.fields[:]
     elif shop_name == "TopSystems":
         allFieldsOfProduct = TopSystemsProduct._meta.fields[:]
+    elif shop_name == "IngramMicro":
+        allFieldsOfProduct = IngramMicroProduct._meta.fields[:]
     availableFieldsList = []
     for field in allFieldsOfProduct:
         availableFieldsList.append(field.name)
@@ -79,4 +95,13 @@ def manage_product_import_view(request, shop_name):
     context.update({"operators": OPERATORS}),
     # print(context)
     template = get_template("manage_product_import_page.html")
+
+    # provide for IngramMicro additionally credentials_form
+    initial = {
+        "xml_user": feed_conf_from_current_shop.xml_user,
+        "xml_pass": feed_conf_from_current_shop.xml_pass,
+        "sftp_url": feed_conf_from_current_shop.sftp_url,
+    }
+    credentials_form = SftpXmlCredentialsForm(initial)
+    context.update({"credentials_form": credentials_form}),
     return HttpResponse(template.render(context, request))

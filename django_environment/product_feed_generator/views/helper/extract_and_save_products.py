@@ -1,3 +1,9 @@
+"""
+Request all products
+from the shops product list
+and import them
+to the database
+"""
 from urllib.request import Request
 from product_feed_generator.models import Feed, Serverkast_Product, TopSystemsProduct
 import urllib.request
@@ -107,14 +113,17 @@ def from_topsystems_feed(request, shop_name):
     }
     return context
 
+def from_ingrammicro_feed(request, shop_name):
+    feed = Feed.objects.get(shop_name=shop_name)
+    form = IngramMicroProductSelectForFinalFeedForm()
+    
+    context = {
+        "feed": feed,
+        "form": form,
+    }
+    return context
 
 # [0'additional_imagelinks,1"brand",2"categories",3"category",4"color",5"condition",6"delivery",7"description",8"ean",9"gender",10"id",11"image_link",12"is_in_stock",13"item_group_id",14"korting",15"link",16"manage_stock",17"material",18"max_price",19"min_price",20"min_sale_qty",21"price",22"prijs_amazon",23"product_type",24"qty_increments",25"shipping_weight",26"size",27"sku",28"special_price",29"special_price_from",30"special_price_to",31"status",32"stock",33"title",34"type",35"type_bootuitrusting",36"verzending",37"visibility"']
-
-"""
-extract
-and saves
-products
-"""
 
 
 def extract_and_save_products(request, shop_name):
@@ -122,4 +131,6 @@ def extract_and_save_products(request, shop_name):
         context = from_serverkast_feed(request, shop_name)
     elif shop_name == "TopSystems":
         context = from_topsystems_feed(request, shop_name)
+    elif shop_name == "IngramMicro":
+        context = from_ingrammicro_feed(request, shop_name)
     return context

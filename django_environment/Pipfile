@@ -10,6 +10,8 @@ urllib3 = "*"
 xmltodict = "*"
 dicttoxml = "*"
 gunicorn = "*"
+pysftp = "*"
+requests = "*"
 
 [dev-packages]
 

@@ -22,3 +22,7 @@ class TopSystemsProduct(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+    class Meta: 
+        verbose_name = "Top Systems Product"
+        verbose_name_plural = "Imported Top Systems Products"

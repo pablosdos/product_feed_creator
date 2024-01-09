@@ -29,3 +29,7 @@ class Serverkast_Product(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+    class Meta: 
+        verbose_name = "Serverkast Product"
+        verbose_name_plural = "Imported Serverkast Products"

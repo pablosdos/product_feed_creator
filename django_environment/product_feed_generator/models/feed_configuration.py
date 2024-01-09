@@ -12,6 +12,9 @@ class FeedConfiguration(models.Model):
     product_schema_for_final_feed = models.CharField(max_length=1023, verbose_name='Product Schema For Final Field')
     custom_calculated_field_1 = models.CharField(max_length=1023, verbose_name='Custom Calculated Field 1')
     custom_calculated_field_2 = models.CharField(max_length=1023, verbose_name='Custom Calculated Field 2')
+    xml_user = models.CharField(max_length=63, null=True, blank=True)
+    xml_pass = models.CharField(max_length=63, null=True, blank=True)
+    sftp_url = models.CharField(max_length=127, null=True, blank=True)
 
     def __str__(self):
         return f"{self.feed} Configuration"
