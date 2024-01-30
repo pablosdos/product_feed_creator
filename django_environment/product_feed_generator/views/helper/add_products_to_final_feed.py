@@ -53,6 +53,10 @@ def from_serverkast_feed(request, shop_name):
     selected_products_from_topsystems_products_list = TopSystemsProduct.objects.filter(is_selected=True).values()
     complete_topsystems_products_list = [entry for entry in selected_products_from_topsystems_products_list]
     configured_topsystems_products_list = apply_configuration_scheme(complete_topsystems_products_list, 'TopSystems')
+    
+
+
+
     selected_products_from_serverkast_products_list = Serverkast_Product.objects.filter(is_selected=True).values()
     #convert queryset to list
     complete_serverkast_products_list = [entry for entry in selected_products_from_serverkast_products_list]
@@ -126,3 +130,14 @@ def add_products_to_final_feed(request, shop_name):
     elif shop_name == "TopSystems":
         context = from_topsystems_feed(request, shop_name)
     return context
+
+
+
+"""
+TODO
+Klasse (die Final Feed Product Model erweitert) schreiben, mit der man 
+- dynamisch Felder erstellen kann
+- Formular-Inhalt zu Final Feed Products hinzufügen kann (speichert zusätzlich Feed-Quelle, z.B. Ingram)
+- Produkte einer bestimmten Feed-Quelle wieder entnehmen kann
+- den Feed zur Datei machen kann
+"""

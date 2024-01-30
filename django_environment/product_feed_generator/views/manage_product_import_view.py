@@ -1,5 +1,6 @@
 from django.template.loader import get_template
 from django.http import HttpResponse
+import json
 from product_feed_generator.forms import *
 from product_feed_generator.models import (
     Feed,
@@ -80,7 +81,8 @@ def manage_product_import_view(request, shop_name):
     custom_calc_field_parts = custom_calc_field_1.split("-")[1:]
     custom_calc_field_name_2 = custom_calc_field_2.split("-")[0]
     custom_calc_field_parts_2 = custom_calc_field_2.split("-")[1:]
-    finalFeedSchemaFieldsList = current_product_schema_for_final_feed.split(",")
+    # finalFeedSchemaFieldsList = current_product_schema_for_final_feed.split(",")
+    finalFeedSchemaFieldsList = json.loads(current_product_schema_for_final_feed).keys()
     feeds = Feed.objects.all()
     context.update({"feeds": feeds}),
     context.update({"shop_name": shop_name}),

@@ -138,6 +138,7 @@
                             <div id="{{operation.0}}"
                                  class="list-group-item"><i
                                    class="bi bi-arrows-move handle float-start"></i>{{operation.1}}
+
                                 <button class="btn btn-danger btn-sm rounded-0 float-end trash-button"
                                         onclick="removeThisElementFromFinalFeedSchema(this)"
                                         type="button"
@@ -172,6 +173,7 @@
                                         data-toggle="tooltip"
                                         data-placement="top"
                                         title="Delete"><i class="bi bi-trash"></i></button>
+                                <button type="button"><i class="bi bi-pencil"></i></button>
                             </div>
                             {% endfor %}
                         </div>
@@ -280,12 +282,16 @@
         final_feed_schema_2.push(custom_calculation_field_2);
         // add original fields to final feed schema
         var fieldsForFinalFeedSchema = document.querySelectorAll("#finalFeedSchemaElement .list-group-item");
+        var final_feed_schema_json_object = {}
         for (i = 0; i < fieldsForFinalFeedSchema.length; i++) {
             final_feed_schema.push(fieldsForFinalFeedSchema[i].id);
+            eval('final_feed_schema_json_object.'+fieldsForFinalFeedSchema[i].id+'=""')
         }
         // console.log(custom_calculation_field_1);
-        console.log(final_feed_schema)
-        document.getElementById('finalFeedProductSchemaStringInput').value = final_feed_schema;
+        // console.log(final_feed_schema)
+        console.log(JSON.stringify(final_feed_schema_json_object))
+        // document.getElementById('finalFeedProductSchemaStringInput').value = final_feed_schema;
+        document.getElementById('finalFeedProductSchemaStringInput').value = JSON.stringify(final_feed_schema_json_object);
         document.getElementById('finalFeedProductSchemaStringInput1').value = final_feed_schema_1;
         document.getElementById('finalFeedProductSchemaStringInput2').value = final_feed_schema_2;
     }
