@@ -23,6 +23,7 @@ OPERATORS = [
 @login_required
 def manage_product_import_view(request, shop_name):
     feed_from_current_shop = Feed.objects.get(shop_name=shop_name)
+    # print(Feed.objects)
     feed_conf_from_current_shop = FeedConfiguration.objects.get(
         feed=feed_from_current_shop
     )
@@ -84,6 +85,12 @@ def manage_product_import_view(request, shop_name):
     # finalFeedSchemaFieldsList = current_product_schema_for_final_feed.split(",")
     finalFeedSchemaFieldsList = json.loads(current_product_schema_for_final_feed).keys()
     feeds = Feed.objects.all()
+    """
+    provide
+    the template
+    with dynamic
+    data
+    """
     context.update({"feeds": feeds}),
     context.update({"shop_name": shop_name}),
     context.update({"availableFields": availableFieldsList}),

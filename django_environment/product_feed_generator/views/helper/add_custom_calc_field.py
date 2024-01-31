@@ -1,3 +1,10 @@
+"""
+OUTDATED
+SINCE
+240131
+NOT IN USE !
+"""
+
 from decimal import Decimal
 from product_feed_generator.models import (
     Feed,
@@ -5,7 +12,7 @@ from product_feed_generator.models import (
 )
 
 
-def get_calculation_result(custom_field_with_name_and_parts):
+def _get_calculation_result(custom_field_with_name_and_parts):
     custom_calculated_field_1_name = custom_field_with_name_and_parts[0]
     custom_calculated_field_1_parts = custom_field_with_name_and_parts[1:]
     string_for_evaluation_in_python = ""
@@ -39,8 +46,8 @@ def add_custom_calc_field(selected_products_list, allFieldsOfProduct, shop_name)
     custom_calculated_field_1_name_and_parts = FeedConfiguration.objects.get(
         feed=feed_from_current_shop
     ).custom_calculated_field_1.split("-")
-    calc_result = get_calculation_result(custom_calculated_field_1_name_and_parts)
-    print(calc_result)
+    calc_result = _get_calculation_result(custom_calculated_field_1_name_and_parts)
+    # print(calc_result)
     for product in selected_products_list:
         try:
             product.update(
@@ -53,7 +60,7 @@ def add_custom_calc_field(selected_products_list, allFieldsOfProduct, shop_name)
     custom_calculated_field_2_name_and_parts = FeedConfiguration.objects.get(
         feed=feed_from_current_shop
     ).custom_calculated_field_2.split("-")
-    calc_result = get_calculation_result(custom_calculated_field_2_name_and_parts)
+    calc_result = _get_calculation_result(custom_calculated_field_2_name_and_parts)
     for product in selected_products_list:
         try:
             product.update(

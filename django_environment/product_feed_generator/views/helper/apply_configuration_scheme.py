@@ -1,3 +1,10 @@
+"""
+OUTDATED
+SINCE
+240131
+NOT IN USE !
+"""
+
 # from decimal import Decimal
 
 # def apply_topsystems_configuration_scheme(complete_topsystems_products_list):
@@ -25,6 +32,7 @@ from product_feed_generator.models import (
 from .add_custom_calc_field import *
 
 def apply_configuration_scheme(selected_products_list, shop_name):
+    # print(selected_products_list)
     #1 find attributes to remove
     #filter list
     feed_from_current_shop = Feed.objects.get(shop_name=shop_name)
@@ -47,7 +55,7 @@ def apply_configuration_scheme(selected_products_list, shop_name):
         allOriginalAttributesOfList.append(field.name)
     attributes_to_remove_from_list = set(allOriginalAttributesOfList) - set(current_product_schema_for_final_feed)
     #2 clean products by filter list
-    print(attributes_to_remove_from_list)
+    # print(attributes_to_remove_from_list)
     selected_products_list_with_custom_calc_field = add_custom_calc_field(selected_products_list, allFieldsOfProduct, shop_name)
     # print(selected_products_list_with_custom_calc_field)
 

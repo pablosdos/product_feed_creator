@@ -8,6 +8,7 @@ import pprint
 import json
 from dicttoxml import dicttoxml
 from product_feed_generator.models import Feed, FeedConfiguration, Serverkast_Product, TopSystemsProduct, IngramMicroProduct
+from product_feed_generator.modules.final_feed_.base import FinalFeed_
 from product_feed_generator.forms import *
 from product_feed_generator.views.helper import *
 from django.contrib.auth.decorators import login_required
@@ -61,7 +62,11 @@ def product_selection_view(request, shop_name):
         return HttpResponse(template.render(context, request))
 
     elif "add_products_to_final_feed_submit" in request.POST:
-        context = add_products_to_final_feed(request, shop_name)
+        finalfeed = FinalFeed_(shop_name)
+        # topsystems_finalfeed._apply_configuration_scheme(complete_topsystems_products_list)
+        context = finalfeed.save_xml_file(request)
+        # print(type(context))
+        del finalfeed
         return HttpResponse(template.render(context, request))
 
     elif "generate_refresh_submit" in request.POST:
