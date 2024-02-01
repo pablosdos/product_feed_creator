@@ -11,12 +11,6 @@ class FinalFeed_:
     # self._shop_name = name
     _self.shop_name = shop_name
 
-  """
-  OUTDATED
-  SINCE
-  240131
-  NOT IN USE !
-  """
   def save_xml_file(_self, unconfigured_product_list) -> dict:
     """
     Saves XML file.
