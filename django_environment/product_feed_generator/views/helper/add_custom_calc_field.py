@@ -56,17 +56,4 @@ def add_custom_calc_field(selected_products_list, allFieldsOfProduct, shop_name)
         except:
             product.update({calc_result['field_name']: "calculation_invalid"})
             # print('not working')
-    # CUSTOM CALC FIELD 2
-    custom_calculated_field_2_name_and_parts = FeedConfiguration.objects.get(
-        feed=feed_from_current_shop
-    ).custom_calculated_field_2.split("-")
-    calc_result = _get_calculation_result(custom_calculated_field_2_name_and_parts)
-    for product in selected_products_list:
-        try:
-            product.update(
-                {calc_result['field_name']: eval(calc_result['eval_string'])}
-            )
-        except:
-            product.update({calc_result['field_name']: "calculation_invalid"})
-            # print('not working')
     return selected_products_list

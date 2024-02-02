@@ -1,3 +1,9 @@
+"""
+find
+out
+in_stock
+of ingram micro product
+"""
 import requests
 import urllib3
 import ssl

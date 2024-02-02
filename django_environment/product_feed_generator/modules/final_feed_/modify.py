@@ -98,15 +98,9 @@ def _add_custom_calc_field(
     feed_from_current_shop = Feed.objects.get(shop_name=shop_name)
     custom_calculated_field_1_name_and_parts = FeedConfiguration.objects.get(
         feed=feed_from_current_shop
-    ).custom_calculated_field_1.split("-")
+    ).custom_calculation_units_list.split("-")
     print(type(custom_calculated_field_1_name_and_parts))
     calc_result = _get_calculation_result(custom_calculated_field_1_name_and_parts)
-    for product in selected_products_list:
-        product.update({calc_result["field_name"]: calc_result["calc_result_value"]})
-    custom_calculated_field_2_name_and_parts = FeedConfiguration.objects.get(
-        feed=feed_from_current_shop
-    ).custom_calculated_field_2.split("-")
-    calc_result = _get_calculation_result(custom_calculated_field_2_name_and_parts)
     for product in selected_products_list:
         product.update({calc_result["field_name"]: calc_result["calc_result_value"]})
     return selected_products_list
