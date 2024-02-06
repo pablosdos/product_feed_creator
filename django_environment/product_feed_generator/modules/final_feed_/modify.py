@@ -1,4 +1,5 @@
 import json
+from decimal import Decimal
 from product_feed_generator.models import (
     Feed,
     FeedConfiguration,
@@ -14,7 +15,6 @@ def _apply_configuration_scheme(selected_products_list, shop_name) -> list:
     Returns configured list of products.
     """
     feed_from_current_shop = Feed.objects.get(shop_name=shop_name)
-    # print(type(feed_from_current_shop))
     current_product_schema_for_final_feed = FeedConfiguration.objects.get(
         feed=feed_from_current_shop
     ).product_schema_for_final_feed
@@ -31,56 +31,63 @@ def _apply_configuration_scheme(selected_products_list, shop_name) -> list:
     attributes_to_remove_from_list = set(allOriginalAttributesOfList) - set(
         current_product_schema_for_final_feed
     )
-    selected_products_list_with_custom_calc_field = _add_custom_calc_field(
+    attributes_to_remove_from_list.add('feed_id')
+    selected_products_list_with_custom_calc_fields = _add_custom_calc_fields(
         selected_products_list, allFieldsOfProduct, shop_name
     )
-
     for product in selected_products_list:
+        product.update({"source_feed": shop_name})
         for attribute_to_remove in attributes_to_remove_from_list:
             if attribute_to_remove in product:
                 del product[attribute_to_remove]
-    return selected_products_list_with_custom_calc_field
+    return selected_products_list_with_custom_calc_fields
 
 
-def _get_calculation_result(custom_field_with_name_and_parts) -> dict:
+def _get_calculation_results(product, custom_field_with_name_and_parts) -> dict:
     """
-    Receive elements for calculation as a list.
+    Receive Product-Object.
+    Receive name and elements (also list) for the custom calculation field of the current feed as a list.
 
-    Returns 1 calculated field as a dict.
+    Returns custom calc field name with calculated value (as dict) for updating product.
     """
-    custom_calculated_field_1_name = custom_field_with_name_and_parts[0]
-    custom_calculated_field_1_parts = custom_field_with_name_and_parts[1:]
-    string_for_evaluation_in_python = ""
-    for part in custom_calculated_field_1_parts:
-        if any(ext in part for ext in ["+", "-", "*", "/"]):
-            string_for_evaluation_in_python = string_for_evaluation_in_python + part
-        elif "custom_value_" in part:
-            string_for_evaluation_in_python = (
-                string_for_evaluation_in_python
-                + "Decimal("
-                + part.split("custom_value_")[1]
-                + ")"
-            )
-        else:
-            string_for_evaluation_in_python = (
-                string_for_evaluation_in_python + "product.get('" + part + "')"
-            )
-    string_for_evaluation_in_python = "round(" + string_for_evaluation_in_python + ",2)"
-    # calculate the result value
-    try:
-        calc_result_value = eval(string_for_evaluation_in_python)
-        return {
-            "field_name": custom_calculated_field_1_name,
-            "calc_result_value": calc_result_value,
-        }
-    except:
-        return {
-            "field_name": custom_calculated_field_1_name,
-            "calc_result_value": "calculation invalid",
-        }
+    custom_calc_fields_as_return_value = {}
+    temp_context_update = {}
+    custom_calculated_field_name = ""
+    custom_calculated_field_result_value = ""
+    custom_field_with_name_and_parts_json = json.loads(custom_field_with_name_and_parts)
+    for custom_field_with_name_and_parts in custom_field_with_name_and_parts_json:
+        custom_calculated_field_name = custom_field_with_name_and_parts[
+            "custom_calc_field_name"
+        ]
+        string_for_evaluation_in_python = ""
+        for calculation_element in custom_field_with_name_and_parts["calculation_elements"]:       
+            if any(ext in calculation_element for ext in ["+", "-", "*", "/"]):
+                string_for_evaluation_in_python = string_for_evaluation_in_python + calculation_element
+            elif "custom_value_" in calculation_element:
+                string_for_evaluation_in_python = (
+                    string_for_evaluation_in_python
+                    + "Decimal("
+                    + calculation_element.split("custom_value_")[1]
+                    + ")"
+                )
+            else:
+                string_for_evaluation_in_python = (
+                    string_for_evaluation_in_python + "product.get('" + calculation_element + "')"
+                )        
+        try:
+            custom_calculated_field_result_value = eval("round(" + string_for_evaluation_in_python + ",2)")
+            temp_context_update = {
+                custom_calculated_field_name: custom_calculated_field_result_value,
+            }
+            custom_field_with_name_and_parts
+        except:
+            temp_context_update = {
+                custom_calculated_field_name: "calculation invalid",
+            }
+        custom_calc_fields_as_return_value.update(temp_context_update),
+    return custom_calc_fields_as_return_value
 
-
-def _add_custom_calc_field(
+def _add_custom_calc_fields(
     selected_products_list, allFieldsOfProduct, shop_name
 ) -> list:
     """
@@ -96,11 +103,10 @@ def _add_custom_calc_field(
     # finally create and add the custom field to selected_products_list
     #
     feed_from_current_shop = Feed.objects.get(shop_name=shop_name)
-    custom_calculated_field_1_name_and_parts = FeedConfiguration.objects.get(
+    custom_calculation_units_list = FeedConfiguration.objects.get(
         feed=feed_from_current_shop
-    ).custom_calculation_units_list.split("-")
-    print(type(custom_calculated_field_1_name_and_parts))
-    calc_result = _get_calculation_result(custom_calculated_field_1_name_and_parts)
+    ).custom_calculation_units_list
+    updated_selected_products_list = None
     for product in selected_products_list:
-        product.update({calc_result["field_name"]: calc_result["calc_result_value"]})
+        product.update(_get_calculation_results(product, custom_calculation_units_list))
     return selected_products_list

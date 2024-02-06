@@ -1,6 +1,8 @@
 from django.template.loader import get_template
 from django.http import HttpResponse
 import json
+from product_feed_generator.modules.final_feed_.base import FinalFeed_
+from django.utils.safestring import mark_safe 
 from product_feed_generator.forms import *
 from product_feed_generator.models import (
     Feed,
@@ -62,7 +64,9 @@ def manage_product_import_view(request, shop_name):
     custom_calculation_units_list = json.loads(
         feed_conf_from_current_shop.custom_calculation_units_list
     )
+    # print(json.mark_safe(feed_conf_from_current_shop.custom_calculation_units_list))
     context.update({"CustomCalcUnits": custom_calculation_units_list}),
+    context.update({"CustomCalcUnitsJson": mark_safe(feed_conf_from_current_shop.custom_calculation_units_list)}),
     context.update({"feeds": feeds}),
     context.update({"shop_name": shop_name}),
     context.update({"availableFields": availableFieldsList}),
@@ -80,17 +84,16 @@ def manage_product_import_view(request, shop_name):
     credentials_form = SftpXmlCredentialsForm(initial)
     context.update({"credentials_form": credentials_form}),
     # adding custom calc field
-    if "add_custom_calc_field" in request.GET:
-        json_ = {
-            "custom_calc_field_name": "",
-            "calculation_elements": [],
-        }
-        custom_calculation_units_list.append(json_)
-        custom_calculation_units_list_as_json_for_database = json.dumps(custom_calculation_units_list)
-        feed_conf_from_current_shop_for_updating.update(
-            custom_calculation_units_list=custom_calculation_units_list_as_json_for_database
-        )
-        context.update({"CustomCalcUnits": custom_calculation_units_list})
+    if "add_custom_calc_field" in request.POST:
+        finalfeed = FinalFeed_(shop_name)
+        updated_custom_calc_units_for_context = finalfeed.save_to_database(custom_calculation_units_list, feed_conf_from_current_shop_for_updating, FeedConfiguration, feed_from_current_shop_for_filtering)
+        context.update(updated_custom_calc_units_for_context)
+        del finalfeed
+    if "remove_custom_calc_field" in request_post_body:
+        finalfeed = FinalFeed_(shop_name)
+        updated_custom_calc_units_for_context = finalfeed.remove_from_database(request_post_body.get("customCalcUnitIndex", ""), feed_conf_from_current_shop_for_updating)
+        context.update(updated_custom_calc_units_for_context)
+        del finalfeed
     # save-protection-credentials
     if "save-protection-credentials" in request_post_body:
         # print(request_post_body.get("xml_pass", ""))
@@ -110,13 +113,18 @@ def manage_product_import_view(request, shop_name):
     to database
     """
     if "save-schema-config" in request_post_body:
-        # print(request_post_body)
         feed_conf_from_current_shop_for_updating.update(
             product_schema_for_final_feed=request_post_body.get(
                 "finalFeedProductSchemaWithoutCustomCalcUnits", "[]"
             )
         )
-
+        feed_conf_from_current_shop_for_updating.update(
+            custom_calculation_units_list=request_post_body.get(
+                "finalFeedCustomCalcUnits", "[]"
+            )
+        )
+        finalfeed = FinalFeed_(shop_name)
+        context = finalfeed.sync_from_database(request)
+        del finalfeed
         context.update({"update_message": "Schema updated!"}),
-
     return HttpResponse(template.render(context, request))
