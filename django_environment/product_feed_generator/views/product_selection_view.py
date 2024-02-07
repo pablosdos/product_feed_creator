@@ -61,6 +61,34 @@ def product_selection_view(request, shop_name):
         }
         return HttpResponse(template.render(context, request))
 
+    elif "toggle_auto_add_new_products" in request.POST:
+        Feed.objects.filter(shop_name=shop_name).update(
+            auto_add_new_products_cronjob_active=not feed.auto_add_new_products_cronjob_active
+        )
+        feed = Feed.objects.get(shop_name=shop_name)
+        if shop_name == "Serverkast":
+            current_products = Serverkast_Product.objects.all()
+            # has to be identical to field in product_feed_generator/forms/serverkast_product_select_for_final_feed_form.py
+            init = {
+                "%s ––– %s" % (row.ean, row.name): row.is_selected
+                for row in current_products
+            }
+            form = ServerkastProductSelectForFinalFeedForm(init)
+        elif shop_name == "TopSystems":
+            current_products = TopSystemsProduct.objects.all()
+            # has to be identical to field in product_feed_generator/forms/serverkast_product_select_for_final_feed_form.py
+            init = {
+                "%s ––– %s" % (row.ean, row.name): row.is_selected
+                for row in current_products
+            }
+            form = TopSystemsProductSelectForFinalFeedForm(init)
+        context = {
+            "feed": feed,
+            "form": form,
+            "feed_config_form": feed_config_form,
+        }
+        return HttpResponse(template.render(context, request))
+
     elif "add_products_to_final_feed_submit" in request.POST:
         finalfeed = FinalFeed_(shop_name)
         # topsystems_finalfeed._apply_configuration_scheme(complete_topsystems_products_list)

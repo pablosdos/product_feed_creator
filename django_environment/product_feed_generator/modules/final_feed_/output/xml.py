@@ -8,7 +8,7 @@ from django.template.loader import get_template
 from product_feed_generator.forms import *
 from django.conf import settings
 from product_feed_generator.modules.final_feed_.modify import _apply_configuration_scheme
-
+from product_feed_generator.views.helper import *
 
 def from_serverkast_feed(request, shop_name):
     """
@@ -21,9 +21,16 @@ def from_serverkast_feed(request, shop_name):
     if form.is_valid():
         for key, value in form.cleaned_data.items():
             product_name_of_form = key.split(" ––– ")[1]
-            Serverkast_Product.objects.filter(name=product_name_of_form).update(
-                is_selected=value
-            )
+            # Serverkast_Product.objects.filter(name=product_name_of_form).update(
+            #     is_selected=value
+            # )
+            product_for_update = Serverkast_Product.objects.get(name=product_name_of_form)
+            product_for_update.is_selected = value
+            product_for_update.save()
+    # xxx = Serverkast_Product.objects.filter(
+    #     is_selected=True
+    # ).values()
+    # print(xxx)
     feed = Feed.objects.get(shop_name=shop_name)
     all_updated_products = Serverkast_Product.objects.all()
     template = get_template("product_selection_page.html")
@@ -51,6 +58,7 @@ def from_serverkast_feed(request, shop_name):
     selected_products_from_topsystems_products_list = TopSystemsProduct.objects.filter(
         is_selected=True
     ).values()
+    # print(selected_products_from_topsystems_products_list)
     complete_topsystems_products_list = [
         entry for entry in selected_products_from_topsystems_products_list
     ]
@@ -60,6 +68,7 @@ def from_serverkast_feed(request, shop_name):
     selected_products_from_serverkast_products_list = Serverkast_Product.objects.filter(
         is_selected=True
     ).values()
+    # print(selected_products_from_serverkast_products_list)
     # convert queryset to list
     complete_serverkast_products_list = [
         entry for entry in selected_products_from_serverkast_products_list
@@ -68,14 +77,24 @@ def from_serverkast_feed(request, shop_name):
     configured_serverkast_products_list = _apply_configuration_scheme(
         complete_serverkast_products_list, "Serverkast"
     )
-    
+    if (feed.auto_add_new_products_cronjob_active):
+        # print(request.POST)
+        add_new_products(request, shop_name)
     joined_list = (
         configured_topsystems_products_list + configured_serverkast_products_list
     )
+    # print(joined_list)
     xml = dicttoxml(joined_list, custom_root="product_final_feed", attr_type=False)
     f = open(settings.LOCATION_OF_FINAL_FEED_FILE, "wb")
     f.write(xml)
     f.close()
+    # selected_products_from_topsystems_products_list = Serverkast_Product.objects.filter(
+    #     is_selected=True
+    # ).values()
+    # selected_products_from_topsystems_products_list = Serverkast_Product.objects.filter(
+    #     name=True
+    # ).values()
+    # print(selected_products_from_topsystems_products_list)
     return context
 
 
