@@ -59,31 +59,41 @@ def _get_calculation_results(product, custom_field_with_name_and_parts) -> dict:
         custom_calculated_field_name = custom_field_with_name_and_parts[
             "custom_calc_field_name"
         ]
-        string_for_evaluation_in_python = ""
-        for calculation_element in custom_field_with_name_and_parts["calculation_elements"]:       
-            if any(ext in calculation_element for ext in ["+", "-", "*", "/"]):
-                string_for_evaluation_in_python = string_for_evaluation_in_python + calculation_element
-            elif "custom_value_" in calculation_element:
-                string_for_evaluation_in_python = (
-                    string_for_evaluation_in_python
-                    + "Decimal("
-                    + calculation_element.split("custom_value_")[1]
-                    + ")"
-                )
-            else:
-                string_for_evaluation_in_python = (
-                    string_for_evaluation_in_python + "product.get('" + calculation_element + "')"
-                )        
-        try:
-            custom_calculated_field_result_value = eval("round(" + string_for_evaluation_in_python + ",2)")
-            temp_context_update = {
-                custom_calculated_field_name: custom_calculated_field_result_value,
-            }
-            custom_field_with_name_and_parts
-        except:
-            temp_context_update = {
-                custom_calculated_field_name: "calculation invalid",
-            }
+        if len(custom_field_with_name_and_parts["calculation_elements"]) == 1:
+            try:
+                temp_context_update = {
+                    custom_calculated_field_name: custom_field_with_name_and_parts["calculation_elements"][0].split("custom_value_")[1],
+                }
+            except:
+                temp_context_update = {
+                    custom_calculated_field_name: "value invalid",
+                }
+        else:
+            string_for_evaluation_in_python = ""
+            for calculation_element in custom_field_with_name_and_parts["calculation_elements"]:       
+                if any(ext in calculation_element for ext in ["+", "-", "*", "/"]):
+                    string_for_evaluation_in_python = string_for_evaluation_in_python + calculation_element
+                elif "custom_value_" in calculation_element:
+                    string_for_evaluation_in_python = (
+                        string_for_evaluation_in_python
+                        + "Decimal("
+                        + calculation_element.split("custom_value_")[1]
+                        + ")"
+                    )
+                else:
+                    string_for_evaluation_in_python = (
+                        string_for_evaluation_in_python + "product.get('" + calculation_element + "')"
+                    )        
+            try:
+                custom_calculated_field_result_value = eval("round(" + string_for_evaluation_in_python + ",2)")
+                temp_context_update = {
+                    custom_calculated_field_name: custom_calculated_field_result_value,
+                }
+                custom_field_with_name_and_parts
+            except:
+                temp_context_update = {
+                    custom_calculated_field_name: "calculation invalid",
+                }
         custom_calc_fields_as_return_value.update(temp_context_update),
     return custom_calc_fields_as_return_value
 
