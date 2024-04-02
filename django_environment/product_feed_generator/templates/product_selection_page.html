@@ -1,165 +1,630 @@
-{% extends "base.html" %}
-
 {% load i18n static %}
-{% block head %}
+
+<!DOCTYPE html>
+<!--
+Author: Keenthemes
+Product Name: MetronicProduct Version: 8.2.4
+Purchase: https://1.envato.market/EA4JP
+Website: http://www.keenthemes.com
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+License: For each use you must have a valid license purchased only from above link in order to legally use the theme for your project.
+-->
+<html lang="en">
+<!--begin::Head-->
 
 <head>
-    <title>Product Feed Creator</title>
-    <meta charset="UTF-8">
+    <title>Metronic - The World's #1 Selling Bootstrap Admin Template by KeenThemes</title>
+    <meta charset="utf-8" />
+    <meta name="description"
+          content="The most advanced Bootstrap 5 Admin Theme with 40 unique prebuilt layouts on Themeforest trusted by 100,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue, Asp.Net Core, Rails, Spring, Blazor, Django, Express.js, Node.js, Flask, Symfony & Laravel versions. Grab your copy now and get life-time updates for free." />
+    <meta name="keywords"
+          content="metronic, bootstrap, bootstrap 5, angular, VueJs, React, Asp.Net Core, Rails, Spring, Blazor, Django, Express.js, Node.js, Flask, Symfony & Laravel starter kits, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible"
-          content="ie=edge">
+          content="width=device-width, initial-scale=1" />
+    <meta property="og:locale"
+          content="en_US" />
+    <meta property="og:type"
+          content="article" />
+    <meta property="og:title"
+          content="Metronic - The World's #1 Selling Bootstrap Admin Template by KeenThemes" />
+    <meta property="og:url"
+          content="https://keenthemes.com/metronic" />
+    <meta property="og:site_name"
+          content="Metronic by Keenthemes" />
+    <link rel="canonical"
+          href="http://index.html" />
+    <link rel="shortcut icon"
+          href="{% static 'assets/media/logos/favicon.ico' %}" />
+    <!--begin::Fonts(mandatory for all pages)-->
     <link rel="stylesheet"
-          href="{% static 'custom-bootstrap/custom.css' %}">
-    <script src="{% static 'bootstrap-5.3.2/dist/js/bootstrap.js' %}"></script>
-    <script src=" https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/js/fontawesome.min.js "></script>
-    <link href=" https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css "
-          rel="stylesheet">
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+          href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <!--end::Fonts-->
+    <!--begin::Vendor Stylesheets(used for this page only)-->
+    <link href="{% static 'assets/plugins/custom/fullcalendar/fullcalendar.bundle.css' %}"
+          rel="stylesheet"
+          type="text/css" />
+    <link href="{% static 'assets/plugins/custom/datatables/datatables.bundle.css' %}"
+          rel="stylesheet"
+          type="text/css" />
+    <!--end::Vendor Stylesheets-->
+    <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+    <link href="{% static 'assets/plugins/global/plugins.bundle.css' %}"
+          rel="stylesheet"
+          type="text/css" />
+    <link href="{% static 'assets/css/style.bundle.css' %}"
+          rel="stylesheet"
+          type="text/css" />
+    <!--end::Global Stylesheets Bundle-->
+    <script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
 </head>
-<style>
-    .list-group .list-group-item {
-        border-radius: 0;
-        cursor: move;
-    }
+<!--end::Head-->
+<!--begin::Body-->
 
-    .list-group .list-group-item:hover {
-        background-color: #f7f7f7;
-    }
-</style>
-{% if message %}
-<script>
-    alert('{{ message }}');
-</script>
-{% endif %}
-{% endblock %}
+<body id="kt_body"
+      class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-disabled">
+    <!--begin::Theme mode setup on page load-->
+    <script>var defaultThemeMode = "light"; var themeMode; if (document.documentElement) { if (document.documentElement.hasAttribute("data-bs-theme-mode")) { themeMode = document.documentElement.getAttribute("data-bs-theme-mode"); } else { if (localStorage.getItem("data-bs-theme") !== null) { themeMode = localStorage.getItem("data-bs-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-bs-theme", themeMode); }</script>
+    <!--end::Theme mode setup on page load-->
+    <!--begin::Main-->
+    <!--begin::Root-->
+    <div class="d-flex flex-column flex-root">
+        <!--begin::Page-->
+        <div class="page d-flex flex-row flex-column-fluid">
+            <!--begin::Wrapper-->
+            <div class="wrapper d-flex flex-column flex-row-fluid"
+                 id="kt_wrapper">
+                <!--begin::Header tablet and mobile-->
+                <div id="kt_header"
+                     class="header py-6 py-lg-0"
+                     data-kt-sticky="true"
+                     data-kt-sticky-name="header"
+                     data-kt-sticky-offset="{lg: '300px'}">
+                    <!--begin::Container-->
+                    <div class="header-container container-xxl">
+                        <!--begin::Page title-->
+                        <div class="d-flex align-items-center align-items-lg-stretch me-5">
 
-{% block content %}
-<div class="container mt-5">
-    <h1 class="card-title"
-        style="margin-top: 100px !important; text-align: center;">{{feed.shop_name}} Products <i
-           class="bi bi-chevron-right"></i> Final Feed</h1>
-    <p class="d-inline-flex gap-1">
-        <a class="btn btn-primary"
-           href="{% url 'manage_product_import_page' feed.shop_name %}">
-            <i class="bi bi-sliders me-3"></i> Manage Imports
-        </a>
-    </p>
-    <p class="d-inline-flex gap-1">
-        <a class="btn btn-primary"
-           data-bs-toggle="collapse"
-           href="#collapseExample"
-           role="button"
-           aria-expanded="false"
-           aria-controls="collapseExample">
-            <i class="bi bi-filter"></i>
-        </a>
+                            <!--begin::Logo-->
+                            <a href="index.html"
+                               class="d-flex align-items-center">
+                                <img alt="Logo"
+                                     src="{% static 'assets/media/logos/demo21.svg' %}"
+                                     class="h-25px h-lg-30px">
+                            </a>
+                            <!--end::Logo-->
+                        </div>
+                        <!--end::Page title=-->
+                        <!--begin::Wrapper-->
 
-    </p>
-    <div class="collapse"
-         id="collapseExample">
-        <div class="card text-center mt-5">
-            <div class="card-body">
-                <!-- <h2 class="card-title">Products of {{feed.shop_name}}</h2> -->
-                <div class="d-flex justify-content-between">
-                    <div> {% include "include_blocks/generate_product_list_button.html" %}
-                        <button form="add_products_to_final_feed_submit"
-                                name="add_products_to_final_feed_submit"
-                                class="btn btn-primary my-2">Add selected Products to Final Feed
-                        </button>
-                        <p class="mb-2" style="line-height: 1;">And Automatically add new products of this source feed (compared to last automatic or manual refresh of product list), if this behaviour is activated</p>
+                        <!--end::Wrapper-->
                     </div>
-                    <div>
-                        <form class=""
-                              method="POST">
-                            <p style="line-height: 1;">Last Auto Refresh: {{feed.products_last_updated}}</p>
-                            <button type="submit"
-                                    name="toggle_auto_refresh_submit"
-                                    class="btn btn-primary my-2">Activate / Disable Auto Refresh
-                            </button>
-                            {% if feed.products_update_cronjob_active %}
-                            <p style="color: green; font-weight: 600;">
-                                active
-                            </p>
-                            {% elif not feed.products_update_cronjob_active %}
-                            <p style="color: red; font-weight: 600;">
-                                not active
-                            </p>
-                            {% endif %}
-                        </form>
-                        <form class=""
-                              method="POST">
-                            <button type="submit"
-                                    name="toggle_auto_add_new_products"
-                                    class="btn btn-primary my-2">Auto Add New Products
-                            </button>
-                            {% if feed.auto_add_new_products_cronjob_active %}
-                            <p style="color: green; font-weight: 600;">
-                                active
-                            </p>
-                            {% elif not feed.auto_add_new_products_cronjob_active %}
-                            <p style="color: red; font-weight: 600;">
-                                not active
-                            </p>
-                            {% endif %}
-                        </form>
-                    </div>
+                    <!--end::Container-->
+                    <div class="header-offset"></div>
                 </div>
+                <div class="content d-flex flex-column flex-column-fluid"
+                     id="kt_content">
+                    <!--begin::Container-->
+                    <div class=""
+                         id="kt_content_container">
+                        <!--begin::Row-->
+                        <div class="row g-5 g-xl-8">
+                            <!--begin::Col-->
+
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-xl-8 ps-xl-12"
+                                 style="width: 90%;">
+                                <!--begin::Engage widget 1-->
+                                <div class="card bgi-position-y-bottom bgi-position-x-end bgi-no-repeat bgi-size-cover bg-primary mb-5 mb-xl-8 border-0"
+                                     style="background-position: 100% 50px;background-size: 500px auto;background-image:url('assets/media/misc/city.png')"
+                                     dir="ltr">
+                                    <!--begin::Body-->
+                                    <div class="card-body pt-10 pb-8">
+                                        <!--begin::Title-->
+                                        <div class="d-flex align-items-center">
+                                            <h1 class="fw-semibold me-3 text-white">Select Your Products</h1>
+                                            <span class="fw-semibold text-white opacity-50">Feed Fusion System</span>
+                                        </div>
+                                        <!--end::Title-->
+                                        <!--begin::Wrapper-->
+                                        <!--begin::Form-->
+                                        <form action="#">
+                                            <!--begin::Card-->
+                                            <div class="card mb-7">
+                                                <!--begin::Card body-->
+                                                <div class="card-body">
+                                                    <!--begin::Compact form-->
+                                                    <div class="d-flex align-items-center">
+                                                        <!--begin::Input group-->
+                                                        <div class="position-relative w-md-400px me-md-2">
+                                                            <i
+                                                               class="ki-outline ki-magnifier fs-3 text-gray-500 position-absolute top-50 translate-middle ms-6"></i>
+                                                            <input type="text"
+                                                                   class="form-control form-control-solid ps-10"
+                                                                   name="search"
+                                                                   value=""
+                                                                   placeholder="Search" />
+                                                        </div>
+                                                        <!--end::Input group-->
+                                                        <!--begin:Action-->
+                                                        <div class="d-flex align-items-center">
+                                                            <button type="submit"
+                                                                    class="btn btn-primary me-5">Search</button>
+                                                            <a href="#"
+                                                               id="kt_horizontal_search_advanced_link"
+                                                               class="btn btn-link"
+                                                               data-bs-toggle="collapse"
+                                                               data-bs-target="#kt_advanced_search_form">Advanced
+                                                                Search</a>
+                                                        </div>
+                                                        <!--end:Action-->
+                                                    </div>
+                                                    <!--end::Compact form-->
+                                                    <!--begin::Advance form-->
+                                                    <div class="collapse"
+                                                         id="kt_advanced_search_form">
+                                                        <!--begin::Separator-->
+                                                        <div class="separator separator-dashed mt-9 mb-6"></div>
+                                                        <!--end::Separator-->
+                                                        <!--begin::Row-->
+                                                        <div class="row g-8 mb-8">
+                                                            <!--begin::Col-->
+                                                            <div class="col-xxl-7">
+                                                                <label
+                                                                       class="fs-6 form-label fw-bold text-gray-900">Tags</label>
+                                                                <tags class="tagify  form-control form-control form-control-solid"
+                                                                      tabindex="-1">
+                                                                    <tag title="products"
+                                                                         contenteditable="false"
+                                                                         spellcheck="false"
+                                                                         tabindex="-1"
+                                                                         class="tagify__tag tagify--noAnim"
+                                                                         value="products">
+                                                                        <x title=""
+                                                                           tabindex="-1"
+                                                                           class="tagify__tag__removeBtn"
+                                                                           role="button"
+                                                                           aria-label="remove tag"></x>
+                                                                        <div><span
+                                                                                  class="tagify__tag-text">products</span>
+                                                                        </div>
+                                                                    </tag>
+                                                                    <tag title="users"
+                                                                         contenteditable="false"
+                                                                         spellcheck="false"
+                                                                         tabindex="-1"
+                                                                         class="tagify__tag tagify--noAnim"
+                                                                         value="users">
+                                                                        <x title=""
+                                                                           tabindex="-1"
+                                                                           class="tagify__tag__removeBtn"
+                                                                           role="button"
+                                                                           aria-label="remove tag"></x>
+                                                                        <div><span class="tagify__tag-text">users</span>
+                                                                        </div>
+                                                                    </tag>
+                                                                    <tag title="events"
+                                                                         contenteditable="false"
+                                                                         spellcheck="false"
+                                                                         tabindex="-1"
+                                                                         class="tagify__tag tagify--noAnim"
+                                                                         value="events">
+                                                                        <x title=""
+                                                                           tabindex="-1"
+                                                                           class="tagify__tag__removeBtn"
+                                                                           role="button"
+                                                                           aria-label="remove tag"></x>
+                                                                        <div><span
+                                                                                  class="tagify__tag-text">events</span>
+                                                                        </div>
+                                                                    </tag><span contenteditable=""
+                                                                          tabindex="0"
+                                                                          data-placeholder="​"
+                                                                          aria-placeholder=""
+                                                                          class="tagify__input"
+                                                                          role="textbox"
+                                                                          aria-autocomplete="both"
+                                                                          aria-multiline="false"></span>
+                                                                    ​
+                                                                </tags><input type="text"
+                                                                       class="form-control form-control form-control-solid"
+                                                                       name="tags"
+                                                                       value="products, users, events"
+                                                                       tabindex="-1">
+                                                            </div>
+                                                            <!--end::Col-->
+                                                            <!--begin::Col-->
+                                                            <div class="col-xxl-5">
+                                                                <!--begin::Row-->
+                                                                <div class="row g-8">
+                                                                    <!--begin::Col-->
+                                                                    <div class="col-lg-6">
+                                                                        <label
+                                                                               class="fs-6 form-label fw-bold text-gray-900">Team
+                                                                            Type</label>
+                                                                        <!--begin::Select-->
+                                                                        <select class="form-select form-select-solid"
+                                                                                data-control="select2"
+                                                                                data-placeholder="In Progress"
+                                                                                data-hide-search="true">
+                                                                            <option value=""></option>
+                                                                            <option value="1">Not started</option>
+                                                                            <option value="2"
+                                                                                    selected="selected">In Progress
+                                                                            </option>
+                                                                            <option value="3">Done</option>
+                                                                        </select>
+                                                                        <!--end::Select-->
+                                                                    </div>
+                                                                    <!--end::Col-->
+                                                                    <!--begin::Col-->
+                                                                    <div class="col-lg-6">
+                                                                        <label
+                                                                               class="fs-6 form-label fw-bold text-gray-900">Select
+                                                                            Group</label>
+                                                                        <!--begin::Radio group-->
+                                                                        <div class="nav-group nav-group-fluid">
+                                                                            <!--begin::Option-->
+                                                                            <label>
+                                                                                <input type="radio"
+                                                                                       class="btn-check"
+                                                                                       name="type"
+                                                                                       value="has"
+                                                                                       checked="checked" />
+                                                                                <span
+                                                                                      class="btn btn-sm btn-color-muted btn-active btn-active-primary fw-bold px-4">All</span>
+                                                                            </label>
+                                                                            <!--end::Option-->
+                                                                            <!--begin::Option-->
+                                                                            <label>
+                                                                                <input type="radio"
+                                                                                       class="btn-check"
+                                                                                       name="type"
+                                                                                       value="users" />
+                                                                                <span
+                                                                                      class="btn btn-sm btn-color-muted btn-active btn-active-primary fw-bold px-4">Users</span>
+                                                                            </label>
+                                                                            <!--end::Option-->
+                                                                            <!--begin::Option-->
+                                                                            <label>
+                                                                                <input type="radio"
+                                                                                       class="btn-check"
+                                                                                       name="type"
+                                                                                       value="orders" />
+                                                                                <span
+                                                                                      class="btn btn-sm btn-color-muted btn-active btn-active-primary fw-bold px-4">Orders</span>
+                                                                            </label>
+                                                                            <!--end::Option-->
+                                                                        </div>
+                                                                        <!--end::Radio group-->
+                                                                    </div>
+                                                                    <!--end::Col-->
+                                                                </div>
+                                                                <!--end::Row-->
+                                                            </div>
+                                                            <!--end::Col-->
+                                                        </div>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <div class="row g-8">
+                                                            <!--begin::Col-->
+                                                            <div class="col-xxl-7">
+                                                                <!--begin::Row-->
+                                                                <div class="row g-8">
+                                                                    <!--begin::Col-->
+                                                                    <div class="col-lg-4">
+                                                                        <label
+                                                                               class="fs-6 form-label fw-bold text-gray-900">Min.
+                                                                            Amount</label>
+                                                                        <!--begin::Dialer-->
+                                                                        <div class="position-relative"
+                                                                             data-kt-dialer="true"
+                                                                             data-kt-dialer-min="1000"
+                                                                             data-kt-dialer-max="50000"
+                                                                             data-kt-dialer-step="1000"
+                                                                             data-kt-dialer-prefix="$"
+                                                                             data-kt-dialer-decimals="2">
+                                                                            <!--begin::Decrease control-->
+                                                                            <button type="button"
+                                                                                    class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0"
+                                                                                    data-kt-dialer-control="decrease">
+                                                                                <i
+                                                                                   class="ki-outline ki-minus-circle fs-1"></i>
+                                                                            </button>
+                                                                            <!--end::Decrease control-->
+                                                                            <!--begin::Input control-->
+                                                                            <input type="text"
+                                                                                   class="form-control form-control-solid border-0 ps-12"
+                                                                                   data-kt-dialer-control="input"
+                                                                                   placeholder="Amount"
+                                                                                   name="manageBudget"
+                                                                                   readonly="readonly"
+                                                                                   value="$50" />
+                                                                            <!--end::Input control-->
+                                                                            <!--begin::Increase control-->
+                                                                            <button type="button"
+                                                                                    class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 end-0"
+                                                                                    data-kt-dialer-control="increase">
+                                                                                <i
+                                                                                   class="ki-outline ki-plus-circle fs-1"></i>
+                                                                            </button>
+                                                                            <!--end::Increase control-->
+                                                                        </div>
+                                                                        <!--end::Dialer-->
+                                                                    </div>
+                                                                    <!--end::Col-->
+                                                                    <!--begin::Col-->
+                                                                    <div class="col-lg-4">
+                                                                        <label
+                                                                               class="fs-6 form-label fw-bold text-gray-900">Max.
+                                                                            Amount</label>
+                                                                        <!--begin::Dialer-->
+                                                                        <div class="position-relative"
+                                                                             data-kt-dialer="true"
+                                                                             data-kt-dialer-min="1000"
+                                                                             data-kt-dialer-max="50000"
+                                                                             data-kt-dialer-step="1000"
+                                                                             data-kt-dialer-prefix="$"
+                                                                             data-kt-dialer-decimals="2">
+                                                                            <!--begin::Decrease control-->
+                                                                            <button type="button"
+                                                                                    class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0"
+                                                                                    data-kt-dialer-control="decrease">
+                                                                                <i
+                                                                                   class="ki-outline ki-minus-circle fs-1"></i>
+                                                                            </button>
+                                                                            <!--end::Decrease control-->
+                                                                            <!--begin::Input control-->
+                                                                            <input type="text"
+                                                                                   class="form-control form-control-solid border-0 ps-12"
+                                                                                   data-kt-dialer-control="input"
+                                                                                   placeholder="Amount"
+                                                                                   name="manageBudget"
+                                                                                   readonly="readonly"
+                                                                                   value="$100" />
+                                                                            <!--end::Input control-->
+                                                                            <!--begin::Increase control-->
+                                                                            <button type="button"
+                                                                                    class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 end-0"
+                                                                                    data-kt-dialer-control="increase">
+                                                                                <i
+                                                                                   class="ki-outline ki-plus-circle fs-1"></i>
+                                                                            </button>
+                                                                            <!--end::Increase control-->
+                                                                        </div>
+                                                                        <!--end::Dialer-->
+                                                                    </div>
+                                                                    <!--end::Col-->
+                                                                    <!--begin::Col-->
+                                                                    <div class="col-lg-4">
+                                                                        <label
+                                                                               class="fs-6 form-label fw-bold text-gray-900">Team
+                                                                            Size</label>
+                                                                        <input type="text"
+                                                                               class="form-control form-control form-control-solid"
+                                                                               name="city" />
+                                                                    </div>
+                                                                    <!--end::Col-->
+                                                                </div>
+                                                                <!--end::Row-->
+                                                            </div>
+                                                            <!--end::Col-->
+                                                            <!--begin::Col-->
+                                                            <div class="col-xxl-5">
+                                                                <!--begin::Row-->
+                                                                <div class="row g-8">
+                                                                    <!--begin::Col-->
+                                                                    <div class="col-lg-6">
+                                                                        <label
+                                                                               class="fs-6 form-label fw-bold text-gray-900">Category</label>
+                                                                        <!--begin::Select-->
+                                                                        <select class="form-select form-select-solid"
+                                                                                data-control="select2"
+                                                                                data-placeholder="In Progress"
+                                                                                data-hide-search="true">
+                                                                            <option value=""></option>
+                                                                            <option value="1">Not started</option>
+                                                                            <option value="2"
+                                                                                    selected="selected">Select</option>
+                                                                            <option value="3">Done</option>
+                                                                        </select>
+                                                                        <!--end::Select-->
+                                                                    </div>
+                                                                    <!--end::Col-->
+                                                                    <!--begin::Col-->
+                                                                    <div class="col-lg-6">
+                                                                        <label
+                                                                               class="fs-6 form-label fw-bold text-gray-900">Status</label>
+                                                                        <div
+                                                                             class="form-check form-switch form-check-custom form-check-solid mt-1">
+                                                                            <input class="form-check-input"
+                                                                                   type="checkbox"
+                                                                                   value=""
+                                                                                   id="flexSwitchChecked"
+                                                                                   checked="checked" />
+                                                                            <label class="form-check-label"
+                                                                                   for="flexSwitchChecked">Active</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--end::Col-->
+                                                                </div>
+                                                                <!--end::Row-->
+                                                            </div>
+                                                            <!--end::Col-->
+                                                        </div>
+                                                        <!--end::Row-->
+                                                    </div>
+                                                    <!--end::Advance form-->
+                                                </div>
+                                                <!--end::Card body-->
+                                            </div>
+                                            <!--end::Card-->
+                                        </form>
+                                        <!--end::Form-->
+                                        <!--end::Wrapper-->
+                                    </div>
+                                    <!--end::Body-->
+                                </div>
+                                <!--end::Engage widget 1-->
+
+
+                                <!--begin::Row-->
+                                <div class="row g-5 g-xl-8">
+
+                                </div>
+                                <!--end::Row-->
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Row-->
+                    </div>
+                    <!--end::Container-->
+                </div>
+                <!--end::Header tablet and mobile-->
+
+                <!--begin::Content-->
+                <div class="col-xl-12">
+                    <!--begin::Table widget 14-->
+                    <div class="card card-flush h-md-100">
+                        <!--begin::Header-->
+
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body pt-6">
+                            <!--begin::Table container-->
+                            <div class="table-responsive">
+                                <!--begin::Table-->
+                                <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr class="fs-7 fw-bold text-gray-500 border-bottom-0">
+                                            <th class="p-0 pb-3 min-w-100px text-start">EAN</th>
+                                            <th class="p-0 pb-3 min-w-175px text-start">PRODUCT NAME</th>
+                                            <th class="p-0 pb-3 min-w-100px text-end">PRICE</th>
+                                            <th class="p-0 pb-3 min-w-175px text-end pe-12">SELECT PRODUCT</th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody>
+                                        {% for feed in form %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="symbol symbol-50px me-3">
+                                                        <img src="assets/media/stock/600x600/img-49.jpg"
+                                                             class=""
+                                                             alt="">
+                                                    </div>
+                                                    <div class="d-flex justify-content-start flex-column">
+                                                        <a href="#"
+                                                           class="text-gray-800 fw-bold text-hover-primary mb-1 fs-6">Mivy
+                                                            App</a>
+                                                        <span
+                                                              class="text-gray-500 fw-semibold d-block fs-7">Serverkast</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-end pe-0">
+
+                                            </td>
+                                            <td class="text-end pe-0">
+                                                <span class="text-gray-600 fw-bold fs-6">$32,400</span>
+                                            </td>
+
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                            </div>
+                            <!--end::Table-->
+                        </div>
+                        <!--end: Card Body-->
+                    </div>
+                    <!--end::Table widget 14-->
+                </div>
+                <!--end::Content-->
+
+                <!--begin::Footer-->
+                <div class="footer py-4 d-flex flex-lg-column"
+                     id="kt_footer">
+                    <!--begin::Container-->
+                    <div class="container-fluid d-flex flex-column flex-md-row flex-stack">
+                        <!--begin::Copyright-->
+                        <div class="text-gray-900 order-2 order-md-1">
+                            <span class="text-gray-500 fw-semibold me-1">Created by</span>
+                            <a href="https://keenthemes.com"
+                               target="_blank"
+                               class="text-muted text-hover-primary fw-semibold me-2 fs-6">Feed Fusion</a>
+                        </div>
+                        <!--end::Copyright-->
+                        <!--begin::Menu-->
+                        <ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
+                            <li class="menu-item">
+                                <a href="https://feedfusion.nl/"
+                                   target="_blank"
+                                   class="menu-link px-2">About</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="https://feedfusion.nl/"
+                                   target="_blank"
+                                   class="menu-link px-2">Support</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="https://feedfusion.nl/"
+                                   target="_blank"
+                                   class="menu-link px-2">Purchase</a>
+                            </li>
+                        </ul>
+                        <!--end::Menu-->
+                    </div>
+                    <!--end::Container-->
+                </div>
+                <!--end::Footer-->
             </div>
+            <!--end::Wrapper-->
         </div>
+        <!--end::Page-->
     </div>
-    <div style="width: 100%;">
-        <div class="float-end">
-            <input type="checkbox"
-                   onchange="toggle(this)" /> Select/Deselect All<br />
-        </div>
-    </div>
+    <!--end::Root-->
 
+    <!--begin::Javascript-->
+    <script>var hostUrl = "assets/";</script>
+    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+    <script src="{% static 'assets/plugins/global/plugins.bundle.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.bundle.js' %}"></script>
+    <!--end::Global Javascript Bundle-->
+    <!--begin::Vendors Javascript(used for this page only)-->
+    <script src="{% static 'assets/plugins/custom/fullcalendar/fullcalendar.bundle.js' %}"></script>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/continentsLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
+    <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <!--end::Vendors Javascript-->
+    <!--begin::Custom Javascript(used for this page only)-->
+    <script src="{% static 'assets/js/widgets.bundle.js' %}"></script>
+    <script src="{% static 'assets/js/custom/widgets.js' %}"></script>
+    <script src="{% static 'assets/js/custom/apps/chat/chat.js' %}"></script>
+    <script src="{% static 'assets/js/custom/utilities/modals/upgrade-plan.js' %}"></script>
+    <script src="{% static 'assets/js/custom/utilities/modals/create-app.js' %}"></script>
+    <script src="{% static 'assets/js/custom/utilities/modals/users-search.js' %}"></script>
+    <!--end::Custom Javascript-->
+    <!--end::Javascript-->
+</body>
+<!--end::Body-->
 
-    <form action=""
-          id="add_products_to_final_feed_submit"
-          method="post"
-          class="my-5">
-        {% csrf_token %}
-        <table class="w-100 ">
-            <thead>
-                <tr>
-                    <th scope="col">EAN & Product Name</th>
-                    <th scope="col">Select Product</th>
-                </tr>
-            </thead>
-            {% for field in form %}
-            <tbody>
-                <tr class="form-check">
-                    <th>
-                        {{ field.label_tag }}
-                    </th>
-                    <td>
-                        {{ field }}
-                    </td>
-                </tr>
-            </tbody>
-            {% endfor %}
-        </table>
-    </form>
-</div>
-<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
-<script type="text/javascript">
-    function toggle(source) {
-        var toggler;
-        var allInputs = document.getElementsByTagName("input");
-        if (source.checked == true) {
-            toggler = true;
-        }
-        else if (source.checked == true) {
-            toggler = false;
-        }
-        for (var i = 0, max = allInputs.length; i < max; i++) {
-            if (allInputs[i].type === 'checkbox')
-                allInputs[i].checked = toggler;
-        }
-    }
-</script>
-{% endblock %}
+</html>

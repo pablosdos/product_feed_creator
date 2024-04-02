@@ -12,6 +12,7 @@ dicttoxml = "*"
 gunicorn = "*"
 pysftp = "*"
 requests = "*"
+psycopg2 = "*"
 
 [dev-packages]
 

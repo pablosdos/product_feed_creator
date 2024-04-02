@@ -10,6 +10,6 @@ class ServerkastProductSelectForFinalFeedForm(forms.Form):
         for every product
         of the Product Model
         """
-        for i, q in enumerate(Serverkast_Product.objects.all()):
+        for i, q in enumerate(Serverkast_Product.objects.all()[0:10]):
             # has to be identical to field in product_feed_generator/views/product_selection_view.py
             self.fields["%s ––– %s"%(q.ean,q.name)] = forms.BooleanField(required=False)
