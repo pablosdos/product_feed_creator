@@ -6,6 +6,7 @@ from .models import (
     Serverkast_Product,
     TopSystemsProduct,
     IngramMicroProduct,
+    Product
 )
 
 
@@ -53,3 +54,4 @@ admin.site.register(FeedConfiguration)
 admin.site.register(Serverkast_Product, ServerkastProductAdmin)
 admin.site.register(TopSystemsProduct, TopSystemsProductAdmin)
 admin.site.register(IngramMicroProduct, IngramMicroProductAdmin)
+admin.site.register(Product)

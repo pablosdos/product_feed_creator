@@ -7,11 +7,19 @@ from urllib.request import Request
 import pprint
 import json
 from dicttoxml import dicttoxml
-from product_feed_generator.models import Feed, FeedConfiguration, Serverkast_Product, TopSystemsProduct, IngramMicroProduct
+from product_feed_generator.models import (
+    Feed,
+    FeedConfiguration,
+    Serverkast_Product,
+    TopSystemsProduct,
+    IngramMicroProduct,
+)
 from product_feed_generator.modules.final_feed_.base import FinalFeed_
-from product_feed_generator.forms import *
+from product_feed_generator.forms import ProductSelectForFinalFeedForm
 from product_feed_generator.views.helper import *
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 @login_required
@@ -128,9 +136,15 @@ def product_selection_view(request, shop_name):
     elif "submit_config_update" in request.POST:
         feedconfig = FeedConfiguration.objects.filter(feed=feed)
         FeedConfiguration.objects.filter(feed=feed).update(
-            retail_price_excluding_tax_division_value=request.POST.get("retail_price_excluding_tax_division_value", 0.0),
-            retail_price_excluding_tax_multiplication_value=request.POST.get("retail_price_excluding_tax_multiplication_value", 0.0),
-            cost_price_multiplication_value=request.POST.get("cost_price_multiplication_value", 0.0),
+            retail_price_excluding_tax_division_value=request.POST.get(
+                "retail_price_excluding_tax_division_value", 0.0
+            ),
+            retail_price_excluding_tax_multiplication_value=request.POST.get(
+                "retail_price_excluding_tax_multiplication_value", 0.0
+            ),
+            cost_price_multiplication_value=request.POST.get(
+                "cost_price_multiplication_value", 0.0
+            ),
         )
         # FeedConfiguration.objects.filter(feed=feed).update(
         #     retail_price_excluding_tax_division_value=request.POST['retail_price_excluding_tax_division_value'],
@@ -167,6 +181,64 @@ def product_selection_view(request, shop_name):
         }
         return HttpResponse(template.render(context, request))
 
+    elif "search_by_search_bar" in request.POST:
+        """
+        GET
+        REQUEST
+        OF PAGE
+        Product
+        Selection
+        Form
+        """
+        search_query = request.POST.get("search_bar", "")
+        object_list = Product.objects.filter(
+            Q(name__icontains=search_query)
+            | Q(short_desc__icontains=search_query)
+            | Q(brand__icontains=search_query)
+            | Q(ean__icontains=search_query)
+        )
+        paginator = Paginator(object_list, 50)
+        page_number = request.GET.get("page")
+        paginator_control_with_products_queryset = paginator.get_page(page_number)
+        paginated_form = ProductSelectForFinalFeedForm(
+            paginator_control_with_products_queryset
+        )
+        context = {
+            "feed": feed,
+            "form": paginated_form,
+            "paginator_control": paginator_control_with_products_queryset,
+            # "feed_config_form": feed_config_form,
+        }
+        return HttpResponse(template.render(context, request))
+
+    elif "feed_source_selector" in request.POST:
+        """
+        GET
+        REQUEST
+        OF PAGE
+        Product
+        Selection
+        Form
+        """
+        choosen_company = request.POST.get("feed_source_selector", "")
+        object_list = Product.objects.filter(feed__shop_name__icontains=choosen_company)
+        if choosen_company == 'All':
+            paginator = Paginator(Product.objects.all(), 50)
+        else:
+            paginator = Paginator(object_list, 50)
+        page_number = request.GET.get("page")
+        paginator_control_with_products_queryset = paginator.get_page(page_number)
+        paginated_form = ProductSelectForFinalFeedForm(
+            paginator_control_with_products_queryset
+        )
+        context = {
+            "feed": feed,
+            "form": paginated_form,
+            "paginator_control": paginator_control_with_products_queryset,
+            # "feed_config_form": feed_config_form,
+        }
+        return HttpResponse(template.render(context, request))
+
     elif request.method == "GET":
         """
         GET
@@ -176,37 +248,20 @@ def product_selection_view(request, shop_name):
         Selection
         Form
         """
-        if shop_name == "Serverkast":
-            current_products = Serverkast_Product.objects.all()
-            # has to be identical to field in product_feed_generator/forms/serverkast_product_select_for_final_feed_form.py
-            init = {
-                "%s ––– %s" % (row.ean, row.name): row.is_selected
-                for row in current_products
-            }
-            form = ServerkastProductSelectForFinalFeedForm(init)
-        elif shop_name == "TopSystems":
-            current_products = TopSystemsProduct.objects.all()
-            # has to be identical to field in product_feed_generator/forms/serverkast_product_select_for_final_feed_form.py
-            init = {
-                "%s ––– %s" % (row.ean, row.name): row.is_selected
-                for row in current_products
-            }
-            form = TopSystemsProductSelectForFinalFeedForm(init)
-        elif shop_name == "IngramMicro":
-            """
-            TODO – IMPLEMENT PAGINATION
-            FOR DEMO JUST FIRST 1000 PRODUCTS
-            """
-            current_products = IngramMicroProduct.objects.all()[0:1000]
-            # has to be identical to field in product_feed_generator/forms/serverkast_product_select_for_final_feed_form.py
-            init = {
-                "%s ––– %s" % (row.ean, row.ingram_part_description): row.is_selected
-                for row in current_products
-            }
-            form = IngramMicroProductSelectForFinalFeedForm(init)
+        paginator = Paginator(Product.objects.all(), 50)
+        page_number = request.GET.get("page")
+        paginator_control_with_products_queryset = paginator.get_page(page_number)
+        paginated_form = ProductSelectForFinalFeedForm(
+            paginator_control_with_products_queryset
+        )
         context = {
             "feed": feed,
-            "form": form,
+            "form": paginated_form,
+            "paginator_control": paginator_control_with_products_queryset,
             # "feed_config_form": feed_config_form,
         }
         return HttpResponse(template.render(context, request))
+    print(request.POST)
+    print(request.POST)
+    print(request.POST)
+    print(request.POST)
