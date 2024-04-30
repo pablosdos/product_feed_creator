@@ -23,10 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-1q0$#d$hz4hwq_z(dk&fgy#v-zo(_*j1kn^fg(s^u4ax!d2our"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['localhost', '0.0.0.0', 'feedcreator.paul-kluge.de', 'feedfusion.nl', 'www.feedfusion.nl']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', 'feedcreator.paul-kluge.de', 'feedfusion.nl', 'www.feedfusion.nl', 'staging.feedfusion.nl']
 
 
 # Application definition
@@ -75,6 +72,7 @@ WSGI_APPLICATION = "django_environment.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DEVELOPMENT
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -82,17 +80,17 @@ DATABASES = {
     }
 }
 
+# PRODUCTION
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'feed_fusion_staging_database',
-#         'USER': 'feed_fusion_staging_user',
-#         'PASSWORD': 'cod143EFLzRMpGn0WiTj',
+#         'NAME': 'feed_fusion_prod_database',
+#         'USER': 'feed_fusion_prod_user',
+#         'PASSWORD': '7<}kkErx:~xThws:',
 #         'HOST': 'localhost',
 #         'PORT': '5432',
 #     }
 # }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -131,11 +129,13 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 # DEVELOPMENT
-STATIC_ROOT = '/Users/paulkluge/Documents/Work/Codebase/Offgridcentrum/product_feed_creator/django_environment/static'
-LOCATION_OF_FINAL_FEED_FILE = "product_feed_generator/static/final-feed-file.xml"
+# STATIC_ROOT = '/Users/paulkluge/Documents/Work/Codebase/Offgridcentrum/product_feed_creator/production/django_environment/static'
+# LOCATION_OF_FINAL_FEED_FILE = "product_feed_generator/static/final-feed-file.xml"
+# DEBUG = True
 # PRODUCTION
-# STATIC_ROOT = '/home/datafeeds/django_environment/static'
-# LOCATION_OF_FINAL_FEED_FILE = "static/final-feed-file.xml"
+# STATIC_ROOT = '/home/datafeeds/production/django_environment/static'
+LOCATION_OF_FINAL_FEED_FILE = "static/final-feed-file.xml"
+DEBUG = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

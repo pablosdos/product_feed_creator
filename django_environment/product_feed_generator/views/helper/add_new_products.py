@@ -38,11 +38,6 @@ def from_serverkast_feed(request, shop_name):
     # Serverkast_Product.objects.all().delete()
     new_product_list = []
     product_data = {}
-    """
-    Check the new
-    RSS Feed of
-    the Shop
-    """
     for item in products:
         if not ("gross_price" in item):
             pass
@@ -78,19 +73,9 @@ def from_serverkast_feed(request, shop_name):
     old_products_names = [old_product.name for old_product in old_products]
     new_products_names = [new_product.name for new_product in new_product_list]
     list_of_newly_added_product_names = []
-    """
-    Compare old (from database)
-    and new product names
-    """
     for new_product_name in new_products_names:
         if new_product_name not in old_products_names:
             list_of_newly_added_product_names.append(new_product_name)
-    """
-    Remove the database
-    products and replace
-    it with updated ones
-    (select new products)
-    """
     Serverkast_Product.objects.all().delete()
     for item in products:
         if not ("gross_price" in item):
@@ -123,11 +108,27 @@ def from_serverkast_feed(request, shop_name):
                 "shipmentby": item.get("shipmentby", "unknown"),
             }
             Serverkast_Product.objects.create(**product_data)
+    #IF ACTIVATED, COPY THE PRODUCT AND UPDATE COPY AS SELECTED
+    selected_products_from_topsystems_products_list = Serverkast_Product.objects.filter(
+        is_selected=True
+    ).values()
+    # print(selected_products_from_topsystems_products_list)
     for newly_added_product_name in list_of_newly_added_product_names:
 
         product_for_update = Serverkast_Product.objects.get(name=newly_added_product_name)
         product_for_update.is_selected = True
         product_for_update.save()
+        # test = Serverkast_Product.objects.get(name=newly_added_product_name)
+        # print(test)
+        # print(test.is_selected)
+        # selected_products_from_topsystems_products_list = Serverkast_Product.objects.filter( 	5U Wall Mount Bracket - Verticale montage
+        #     name=True
+        # ).values()
+    # selected_products_from_topsystems_products_list = Serverkast_Product.objects.filter(
+    #     is_selected=True
+    # ).values()
+
+    # print(selected_products_from_topsystems_products_list)
     return request
 
 
@@ -138,32 +139,26 @@ def from_topsystems_feed(request, shop_name):
     file = urllib.request.urlopen(feed_request)
     csvfile = csv.reader(io.StringIO(file.read().decode("utf-8")), delimiter=",")
     header = next(csvfile)
-    new_product_list = []
+    TopSystemsProduct.objects.all().delete()
     # print(header)
     data = list(csvfile)
     # print(data)
-    """
-    Check the new
-    CSV Feed of
-    the Shop
-    """
     for item in data:
         sales_price_excluding_tax = Decimal(item[21].split(" EUR")[0].strip(' "'))
-        product_data = {
-            "feed":feed,
-            "is_selected":False,
-            "sku":item[27],
-            "name":item[33],
-            "long_description":item[7],
-            "main_image":item[11],
-            "extra_image_1":item[0],
-            "sales_price_excluding_tax":sales_price_excluding_tax,
-            "shipping_weight":Decimal(item[25].split(" kg")[0].strip(' "')),
-            "brand":item[1],
-            "ean":item[8],
-            "current_stock":item[32],
-        }
-        new_product_list.append(TopSystemsProduct(**product_data))
+        TopSystemsProduct.objects.create(
+            feed=feed,
+            is_selected=False,
+            sku=item[27],
+            name=item[33],
+            long_description=item[7],
+            main_image=item[11],
+            extra_image_1=item[0],
+            sales_price_excluding_tax=sales_price_excluding_tax,
+            shipping_weight=Decimal(item[25].split(" kg")[0].strip(' "')),
+            brand=item[1],
+            ean=item[8],
+            current_stock=item[32],
+        )
     file.close()
     # print(all_new_created_products)
     form = TopSystemsProductSelectForFinalFeedForm()
@@ -172,50 +167,6 @@ def from_topsystems_feed(request, shop_name):
         "feed": feed,
         "form": form,
     }
-    old_products = TopSystemsProduct.objects.all()
-    old_products_names = [old_product.name for old_product in old_products]
-    new_products_names = [new_product.name for new_product in new_product_list]
-    list_of_newly_added_product_names = []
-    """
-    Compare old (from database)
-    and new product names
-    """
-    # print(old_products_names)
-    # print(new_products_names)
-    for new_product_name in new_products_names:
-        if new_product_name not in old_products_names:
-            print(new_product_name)
-            list_of_newly_added_product_names.append(new_product_name)
-    print(list_of_newly_added_product_names)
-    """
-    Remove the database
-    products and replace
-    it with updated ones
-    (select new products)
-    """
-    TopSystemsProduct.objects.all().delete()
-    for item in data:
-        sales_price_excluding_tax = Decimal(item[21].split(" EUR")[0].strip(' "'))
-        product_data = {
-            "feed":feed,
-            "is_selected":False,
-            "sku":item[27],
-            "name":item[33],
-            "long_description":item[7],
-            "main_image":item[11],
-            "extra_image_1":item[0],
-            "sales_price_excluding_tax":sales_price_excluding_tax,
-            "shipping_weight":Decimal(item[25].split(" kg")[0].strip(' "')),
-            "brand":item[1],
-            "ean":item[8],
-            "current_stock":item[32],
-        }
-        TopSystemsProduct.objects.create(**product_data)
-    # print(TopSystemsProduct.objects.get(name='MG SmartLink Connect'))
-    for newly_added_product_name in list_of_newly_added_product_names:
-        product_for_update = TopSystemsProduct.objects.get(name=newly_added_product_name)
-        product_for_update.is_selected = True
-        product_for_update.save()
     return context
 
 

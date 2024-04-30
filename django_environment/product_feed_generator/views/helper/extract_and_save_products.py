@@ -5,7 +5,7 @@ and import them
 to the database
 """
 from urllib.request import Request
-from product_feed_generator.models import Feed, Serverkast_Product, TopSystemsProduct, Product
+from product_feed_generator.models import Feed, Serverkast_Product, TopSystemsProduct
 import urllib.request
 import xmltodict
 import csv
@@ -41,21 +41,31 @@ def from_serverkast_feed(request, shop_name):
             # print('item gross price is empty for')
             # print(item["name"])
         else:
-            sales_price_excluding_tax = Decimal(item["gross_price"].split(" EUR")[0].strip(' "'))
-            Product.objects.create(
-                feed=feed,
-                is_selected=False,
-                sku=item["sku"],
-                name=item["name"],
-                long_description=item.get("long_description", "empty"),
-                main_image=item["main_image"],
-                extra_image_1=item.get("extra_image_1", None),
-                sales_price_excluding_tax=item["gross_price"],
-                shipping_weight=Decimal(0.0),
-                brand=item["brand"],
-                ean=item.get("ean", "empty"),
-                current_stock=item["current_stock"],
-            )
+            product_data = {
+                "feed": feed,
+                "is_selected": False,
+                "sku": item["sku"],
+                "name": item["name"],
+                "short_desc": item.get("short_desc", "empty"),
+                "long_description": item.get("long_description", "empty"),
+                "main_image": item["main_image"],
+                "extra_image_1": item.get("extra_image_1", None),
+                "extra_image_2": item.get("extra_image_2", None),
+                "extra_image_3": item.get("extra_image_3", None),
+                "extra_image_4": item.get("extra_image_4", None),
+                "extra_image_5": item.get("extra_image_5", None),
+                "extra_image_6": item.get("extra_image_6", None),
+                "extra_image_7": item.get("extra_image_7", None),
+                "extra_image_8": item.get("extra_image_8", None),
+                "extra_image_9": item.get("extra_image_9", None),
+                "sales_price_excluding_tax": item["gross_price"],
+                "brand": item["brand"],
+                "ean": item.get("ean", "empty"),
+                "current_stock": item["current_stock"],
+                "url_more_info": item["url_more_info"],
+                "shipmentby": item.get("shipmentby", "unknown"),
+            }
+            Serverkast_Product.objects.create(**product_data)
     # print(json.dumps(items[0], indent=4))
     form = ServerkastProductSelectForFinalFeedForm()
     # print(form)
@@ -79,7 +89,7 @@ def from_topsystems_feed(request, shop_name):
     # print(data)
     for item in data:
         sales_price_excluding_tax = Decimal(item[21].split(" EUR")[0].strip(' "'))
-        Product.objects.create(
+        TopSystemsProduct.objects.create(
             feed=feed,
             is_selected=False,
             sku=item[27],

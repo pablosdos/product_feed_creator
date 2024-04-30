@@ -11,17 +11,13 @@ from product_feed_generator.modules.final_feed_.modify import _apply_configurati
 from product_feed_generator.views.helper import *
 
 def from_serverkast_feed(request, shop_name):
-    feed = Feed.objects.get(shop_name=shop_name)
-    form = ServerkastProductSelectForFinalFeedForm(request.POST)
-    if (feed.auto_add_new_products_cronjob_active):
-        # print(request.POST)
-        add_new_products(request, shop_name)
     """
     check
     products (in db)
     by
     form
     """
+    form = ServerkastProductSelectForFinalFeedForm(request.POST)
     if form.is_valid():
         for key, value in form.cleaned_data.items():
             product_name_of_form = key.split(" ––– ")[1]
@@ -35,7 +31,7 @@ def from_serverkast_feed(request, shop_name):
     #     is_selected=True
     # ).values()
     # print(xxx)
-
+    feed = Feed.objects.get(shop_name=shop_name)
     all_updated_products = Serverkast_Product.objects.all()
     template = get_template("product_selection_page.html")
     # has to be identical to field in product_feed_generator/forms/serverkast_product_select_for_final_feed_form.py
@@ -81,6 +77,9 @@ def from_serverkast_feed(request, shop_name):
     configured_serverkast_products_list = _apply_configuration_scheme(
         complete_serverkast_products_list, "Serverkast"
     )
+    if (feed.auto_add_new_products_cronjob_active):
+        # print(request.POST)
+        add_new_products(request, shop_name)
     joined_list = (
         configured_topsystems_products_list + configured_serverkast_products_list
     )
@@ -100,25 +99,20 @@ def from_serverkast_feed(request, shop_name):
 
 
 def from_topsystems_feed(request, shop_name):
-    feed = Feed.objects.get(shop_name=shop_name)
-    form = TopSystemsProductSelectForFinalFeedForm(request.POST)
-
-    if (feed.auto_add_new_products_cronjob_active):
-        # print(request.POST)
-        add_new_products(request, shop_name)
     """
     check
     products (in db)
     by
     form
     """
+    form = TopSystemsProductSelectForFinalFeedForm(request.POST)
     if form.is_valid():
         for key, value in form.cleaned_data.items():
             product_name_of_form = key.split(" ––– ")[1]
             TopSystemsProduct.objects.filter(name=product_name_of_form).update(
                 is_selected=value
             )
-
+    feed = Feed.objects.get(shop_name=shop_name)
     all_updated_products = TopSystemsProduct.objects.all()
     template = get_template("product_selection_page.html")
     # has to be identical to field in product_feed_generator/forms/serverkast_product_select_for_final_feed_form.py
